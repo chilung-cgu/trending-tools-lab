@@ -7,7 +7,7 @@
 ## 打開成品
 
 ```sh
-git clone <本 repo> trending-tools-lab
+git clone https://github.com/chilung-cgu/trending-tools-lab.git
 cd trending-tools-lab
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
