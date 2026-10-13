@@ -54,4 +54,4 @@ node_modules/.bin/playwright test
 
 ## 下一步
 
-見 [docs/next-ideas.md](docs/next-ideas.md)：個人 Trending 雷達與定期挑選新工具的方向，尚未實作。
+每週挑選新工具：用 scripts/weekly_candidates.py 產生候選清單，再由人決定實踐哪些，見 [docs/weekly.md](docs/weekly.md)。其他想法見 [docs/next-ideas.md](docs/next-ideas.md)，尚未實作。

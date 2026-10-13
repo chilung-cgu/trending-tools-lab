@@ -14,7 +14,7 @@ try {
   for (const path of ['', 'README.html', 'docs/impeccable.html', 'docs/archify.html',
     'docs/hyperframes.html', 'docs/text-to-cad.html', 'docs/context-mode.html',
     'docs/worktrunk.html', 'docs/re-review.html', 'docs/review-resolution.html',
-    'docs/progress.html', 'docs/next-ideas.html', 'docs/openrig.html', 'NOTICE.html', 'artifacts/openrig/', 'web/PRODUCT.html', 'web/DESIGN.html']) {
+    'docs/progress.html', 'docs/next-ideas.html', 'docs/openrig.html', 'docs/weekly.html', 'NOTICE.html', 'artifacts/openrig/', 'web/PRODUCT.html', 'web/DESIGN.html']) {
     const response = await page.goto(new URL(path, base).href);
     if (response.status() !== 200) broken.push({ url: page.url(), status: response.status() });
     for (const url of await page.locator('a[href],script[src],link[href],source[src]')

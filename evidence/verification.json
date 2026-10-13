@@ -1,5 +1,5 @@
 {
-  "verified_at_utc": "2026-10-13T15:24:42.253416+00:00",
+  "verified_at_utc": "2026-10-13T15:35:35.534905+00:00",
   "checks": {
     "archify": {
       "gates": {
@@ -68,7 +68,7 @@
       "run_log": "evidence/worktrunk/worktrunk_demo.log"
     },
     "python": {
-      "passed": 21
+      "passed": 27
     },
     "browser": {
       "passed": 12,
@@ -114,6 +114,10 @@
       "queue_hops": 3,
       "tmux_canary_survived": true,
       "sigterm_cleanup_clean": true
+    },
+    "weekly_candidates": {
+      "tests": 6,
+      "network_failure_marks_unverified": true
     }
   },
   "limits": [
