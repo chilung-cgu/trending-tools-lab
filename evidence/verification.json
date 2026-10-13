@@ -1,5 +1,5 @@
 {
-  "verified_at_utc": "2026-10-13T15:35:35.534905+00:00",
+  "verified_at_utc": "2026-10-13T15:53:10.409932+00:00",
   "checks": {
     "archify": {
       "gates": {
@@ -68,7 +68,7 @@
       "run_log": "evidence/worktrunk/worktrunk_demo.log"
     },
     "python": {
-      "passed": 27
+      "passed": 35
     },
     "browser": {
       "passed": 12,
@@ -118,6 +118,15 @@
     "weekly_candidates": {
       "tests": 6,
       "network_failure_marks_unverified": true
+    },
+    "pages": {
+      "url": "https://chilung-cgu.github.io/trending-tools-lab/",
+      "workflow_run": "success",
+      "checked_local_links": 70,
+      "broken_links": 0,
+      "page_errors": 0,
+      "hidden_openrig_scripts_served": true,
+      "dev_files_absent": true
     }
   },
   "limits": [

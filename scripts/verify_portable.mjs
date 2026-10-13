@@ -2,8 +2,10 @@ import fs from 'node:fs';
 import { chromium } from '@playwright/test';
 
 const base = new URL(process.argv[2] || 'http://127.0.0.1:8767/');
-if (base.protocol !== 'http:' || base.hostname !== '127.0.0.1') {
-  throw new Error('請提供解壓成品的 loopback HTTP URL。');
+const isLoopback = base.protocol === 'http:' && base.hostname === '127.0.0.1';
+const isOwnPages = base.protocol === 'https:' && base.hostname === 'chilung-cgu.github.io';
+if (!isLoopback && !isOwnPages) {
+  throw new Error('只允許 loopback 或本專案的 GitHub Pages 網址。');
 }
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
