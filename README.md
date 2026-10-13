@@ -4,7 +4,13 @@
 
 資料來源是 [chilung-cgu/github-trending-crawler](https://github.com/chilung-cgu/github-trending-crawler) 保存的快照。這些是歷史觀測，不是即時榜單。
 
-## 打開成品
+## 線上瀏覽
+
+**https://chilung-cgu.github.io/trending-tools-lab/** ：打開就能用，不需要安裝或下載任何東西。
+
+網站每次 main 更新時由 GitHub Actions 自動部署，內容只來自 repo 裡被追蹤的檔案。
+
+## 在自己的電腦打開
 
 ```sh
 git clone https://github.com/chilung-cgu/trending-tools-lab.git
@@ -12,7 +18,7 @@ cd trending-tools-lab
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-開啟 http://127.0.0.1:8765/ 。成品都已預先建置，可以直接瀏覽，不需要安裝任何工具。若是在遠端機器上，從自己的電腦建立 SSH tunnel：`ssh -N -L 8765:127.0.0.1:8765 你的主機`。
+開啟 `http://127.0.0.1:8765/` 。離線也能用，或想修改後立刻看效果時使用。
 
 | 成果 | 你可以做什麼 | 教學 |
 | --- | --- | --- |

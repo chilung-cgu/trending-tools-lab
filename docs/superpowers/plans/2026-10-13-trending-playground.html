@@ -1,0 +1,92 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../../../index.html">← 回到成品入口</a></nav><main><h1>Trending 工具實驗室 Implementation Plan</h1>
+<blockquote>
+<p><strong>For agentic workers:</strong> Use superpowers:subagent-driven-development or superpowers:executing-plans task-by-task. User explicitly authorizes autonomous design and execution; no repeated approval gates.</p>
+</blockquote>
+<p><strong>Goal:</strong> 完成五項工具成品／實驗及 Worktrunk 隔離練習，附繁中操作教學。</p>
+<p><strong>Architecture:</strong> 獨立專案，共同保存四週原始快照與標準 index；web、archify、video、cad、context 分別產出 artifacts。主代理掌握依賴安裝、來源固定、跨模組契約及驗證，worker 各自修改不相交目錄。</p>
+<p><strong>Tech Stack:</strong> 專案內 Node 22、固定 npm dependencies、Python uv/.venv、Chromium、FFmpeg、Archify CLI、HyperFrames、cadgen、context-mode、Worktrunk。</p>
+<p><strong>Spec:</strong> ../specs/2026-10-13-trending-playground-design.md</p>
+<h2>Global Constraints</h2>
+<ul>
+<li>Linux aarch64；Node 22 工具鏈使用專案內路徑；Python 採 uv/.venv。</li>
+<li>日期 2026-09-21、2026-09-28、2026-10-05、2026-10-12；每日最後成功快照。</li>
+<li>rolling stars 不相加，未進 Top 10 不當作 0；公開來源 commit 固定。</li>
+<li>不改全域 credentials、agent 規則或 shell 啟動檔；server 僅 loopback。</li>
+<li>Luna 若用只可 max；Sol CLI worker 指定 gpt-6.1-sol medium；不可假稱 provider 用量。</li>
+<li>不發布、不 push、不操作真實硬體、不自動 merge；所有交付可重跑。</li>
+</ul>
+<h2>Review Focus</h2>
+<ul>
+<li>過期 snapshot：UI 必須顯示來源日期，不宣稱即時。</li>
+<li>空搜尋及語言 filter：正確空狀態，不殘留上一批結果。</li>
+<li>四週缺席：跨期紀錄標為未進榜，不設 stars=0。</li>
+<li>ARM64 安裝失敗：保留實際錯誤，不拿替代圖片冒充 CAD／MP4。</li>
+<li>MCP 搜尋只找到部分錯誤：測試每個已知 marker，不能只報輸出縮小。</li>
+</ul>
+<h2>Task 1: 專案與共用資料</h2>
+<p>Files: <code>scripts/export_snapshots.py</code>, <code>tests/test_snapshots.py</code>, <code>data/raw/*.json</code>, <code>data/index.json</code>, <code>data/provenance.json</code>, <code>package.json</code>, <code>.gitignore</code>, <code>scripts/env.sh</code>。</p>
+<p>Interface: index.json = <code>{snapshots:[{date,commit,generated_at_taipei,source_url,weekly:Item[],monthly:Item[]}]} </code>；Item沿用 crawler 欄位。原始 commits 另記 provenance。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 先寫測試：四日期、有47個unique repos、weekly/monthly各10個、最新generated_at正確、來源URI固定commit。</li>
+<li><input disabled="" type="checkbox"> 執行測試確認資料不存在時失敗。</li>
+<li><input disabled="" type="checkbox"> 匯出原始資料與index；固定工具鏈與依賴，保存版本。</li>
+<li><input disabled="" type="checkbox"> 執行完整資料測試，檢查 schema 与原始資料一致。</li>
+</ul>
+<h2>Task 2: Impeccable web</h2>
+<p>Files: <code>web/index.html</code>, <code>web/style.css</code>, <code>web/app.js</code>, <code>web/PRODUCT.md</code>, <code>web/DESIGN.md</code>, <code>tests/web.spec.js</code>, <code>docs/impeccable.md</code>。</p>
+<p>Consumes Task1 index via relative fetch；Produces <code>/web/</code> browser app、<code>evidence/impeccable/</code> detector JSON、screenshots。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 閱讀已查核 Impeccable skill，寫實際UI驗收測試。</li>
+<li><input disabled="" type="checkbox"> 建立介面和filter，使用安全DOM rendering；記錄設計取捨。</li>
+<li><input disabled="" type="checkbox"> 執行實際detect，修正或明確說明具體finding。</li>
+<li><input disabled="" type="checkbox"> 真實Chromium測試三viewport、日期／period／搜尋／語言／details與source links。</li>
+<li><input disabled="" type="checkbox"> 教學含玩法與重建，保存截圖。</li>
+</ul>
+<h2>Task 3: Archify workflow</h2>
+<p>Files: <code>diagrams/crawler.workflow.json</code>, <code>scripts/build_archify.sh</code>, <code>docs/archify.md</code>。</p>
+<p>Consumes固定commit crawler source；Produces <code>artifacts/archify/crawler.html</code>、原生receipt及screenshot。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 閱讀原生SKILL與workflow schema/example、source parser/retry邏輯。</li>
+<li><input disabled="" type="checkbox"> 產生真實工作流JSON，保存來源mapping。</li>
+<li><input disabled="" type="checkbox"> 執行native finalize及browser gate；修復失敗。</li>
+<li><input disabled="" type="checkbox"> 測試節點、route、theme／export等實際可用功能；補教學。</li>
+</ul>
+<h2>Task 4: HyperFrames video</h2>
+<p>Files: <code>video/index.html</code>, <code>scripts/build_video.sh</code>, <code>docs/hyperframes.md</code>。</p>
+<p>Consumes Task1 index；Produces <code>artifacts/video/trending.mp4</code>與frames、ffprobe JSON。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 閱讀HyperFrames技能、composition契約、lint／render CLI。</li>
+<li><input disabled="" type="checkbox"> 以四日期建立30秒1280x720 composition；資料直接衍生，禁止累加rolling stars。</li>
+<li><input disabled="" type="checkbox"> native lint/render；ffprobe檢查duration/size，擷取三frames人工審查。</li>
+<li><input disabled="" type="checkbox"> 教學包含改腳本、換資料、preview與render。</li>
+</ul>
+<h2>Task 5: CAD</h2>
+<p>Files: <code>cad/cable_organizer.py</code>, <code>cad/parameters.json</code>, <code>scripts/build_cad.sh</code>, <code>tests/test_cad.py</code>, <code>docs/text-to-cad.md</code>。</p>
+<p>Produces STEP、STL、geometry.json、預覽/工程圖；參數以mm為單位。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 確認ARM64 wheel，讀官方CAD skill與build契約。</li>
+<li><input disabled="" type="checkbox"> 定義預期bbox／volume／參數變更測試，先確認無模型時失敗。</li>
+<li><input disabled="" type="checkbox"> 建立真實solid與原生export；測試第二組尺寸。</li>
+<li><input disabled="" type="checkbox"> 本機預覽／工程圖，確認缺孔、裂體與單位；說明非製造認證。</li>
+</ul>
+<h2>Task 6: context-mode與Worktrunk</h2>
+<p>Files: <code>context/mcp_experiment.py</code>, <code>context/generate_fixture.py</code>, <code>docs/context-mode.md</code>, <code>docs/worktrunk.md</code>, <code>scripts/worktree_demo.sh</code>。</p>
+<p>Produces真實MCP receipts、benchmark.json、Worktrunk evidence；不改global hooks。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 原生MCP initialize/tools/list，按返回schema呼叫工具。</li>
+<li><input disabled="" type="checkbox"> 生成含三marker的合成log；逐一搜尋並assert保留上下文。</li>
+<li><input disabled="" type="checkbox"> 記錄full/retrieval bytes及chars和stats，不將bytes當tokens。</li>
+<li><input disabled="" type="checkbox"> 使用wt建立/列出本專案demo worktrees，驗證檔案隔離。</li>
+<li><input disabled="" type="checkbox"> 教學區分MCP與hooks，提供opt-in步驟及安全練習。</li>
+</ul>
+<h2>Task 7: 整合與交付</h2>
+<p>Files: <code>README.md</code>, <code>index.html</code>, <code>scripts/serve.sh</code>, <code>evidence/verification.json</code>, <code>docs/progress.md</code>。</p>
+<ul>
+<li><input disabled="" type="checkbox"> 所有入口相對連結有效；guide可跟著操作。</li>
+<li><input disabled="" type="checkbox"> 資料測試、UI suite、Archify native checks、影片probe、CAD geometry、MCP markers與wt均重跑。</li>
+<li><input disabled="" type="checkbox"> 獨立review，主代理修正具體finding與驗證。</li>
+<li><input disabled="" type="checkbox"> 提供入口、SSH tunnel、成品特色與證據，不把未測項目說成完成。</li>
+</ul>
+</main></html>

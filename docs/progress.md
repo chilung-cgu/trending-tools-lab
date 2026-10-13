@@ -1,6 +1,6 @@
 # 實驗室完成紀錄
 
-既有規格與計畫保存在 [superpowers/specs](superpowers/specs/) 與 [superpowers/plans](superpowers/plans/)。本次由目前 session 統籌，在 `lab/trending-tools` worktree 完成工具實踐；沒有修改原 crawler repo、沒有發布或推送。
+既有規格與計畫保存在 [設計規格](superpowers/specs/2026-10-13-trending-playground-design.md) 與 [實作計畫](superpowers/plans/2026-10-13-trending-playground.md)。本次由目前 session 統籌，在 `lab/trending-tools` worktree 完成工具實踐；沒有修改原 crawler repo、沒有發布或推送。
 
 | 任務 | 實際成果與驗證 |
 | --- | --- |

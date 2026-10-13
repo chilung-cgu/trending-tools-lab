@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
 <style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
 <nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>第二輪成品審查</h1>
-<p>2026-10-13 重新審查原訂六項成果。這輪除了測試，還重新執行 Archify 原生 finalize、CAD 建置與預覽、HyperFrames check/render、真實 context-mode MCP 檢索及 Worktrunk 隔離示範；最後驗收解壓後的成品包。最新數據見 <a href="../evidence/verification.json">verification.json</a>。</p>
+<p>2026-10-13 重新審查原訂六項成果。這輪除了測試，還重新執行 Archify 原生 finalize、CAD 建置與預覽、HyperFrames check/render、真實 context-mode MCP 檢索及 Worktrunk 隔離示範；最後驗收解壓後的成品包。最新數據見 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/evidence/verification.json">verification.json</a>。</p>
 <h2>發現與修正</h2>
 <table>
 <thead>
@@ -12,7 +12,7 @@
 </thead>
 <tbody><tr>
 <td>MCP 收據遺失非當前回應的伺服器通知</td>
-<td><a href="../context/mcp_experiment.py">mcp_experiment.py</a> 保留 <code>server_message</code>；真實子行程交錯傳送通知與回應，測試先失敗再通過</td>
+<td><a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/context/mcp_experiment.py">mcp_experiment.py</a> 保留 <code>server_message</code>；真實子行程交錯傳送通知與回應，測試先失敗再通過</td>
 </tr>
 <tr>
 <td>忽略 SIGTERM 的 MCP 子行程被 kill 後未 wait</td>
@@ -20,7 +20,7 @@
 </tr>
 <tr>
 <td>影片重建流程未包含瀏覽器 check 門檻</td>
-<td><a href="../scripts/build_video.sh">build_video.sh</a> 指定 Playwright Chromium 並驗證 JSON <code>ok</code> 和 <code>browserSkipped</code>；兩種 CLI exit 0 但驗證失敗的案例，舊流程失敗、新流程通過，含 Python optimization 環境</td>
+<td><a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/scripts/build_video.sh">build_video.sh</a> 指定 Playwright Chromium 並驗證 JSON <code>ok</code> 和 <code>browserSkipped</code>；兩種 CLI exit 0 但驗證失敗的案例，舊流程失敗、新流程通過，含 Python optimization 環境</td>
 </tr>
 <tr>
 <td>「OpenRig 已排除」容易讓人以為榜單也過濾</td>
@@ -30,7 +30,7 @@
 <p>資料／Web 與 CAD／MCP／Worktrunk 分別由兩個獨立上下文 reviewer 查核。另一份沿用舊上下文的回覆重複了已修正的 Archify 發現；對照目前連線、wrapper 與測試後棄用，不當成本輪新缺陷。未採納 CAD 工程圖未使用 import 的整理建議，因為它不影響這次功能契約。</p>
 <h2>特別補查的操作路徑</h2>
 <p>四份原始 JSON 重新從 GitHub 固定 commit 下載後逐 byte 比對，全部與本機相同；不只比對本機 index 和 raw。日期與來源仍是 2026-09-21、09-28、10-05、10-12，不宣稱為即時榜單。</p>
-<p>CAD 初次重建顯示 current，不能因此宣稱參數變更已經驗證。新增 <a href="../tests/test_cad.py">子行程回歸測試</a>：暫存專案先輸出 100 mm STEP，再只改 JSON 為 80 mm，重新執行模型腳本，讀取實際匯出 STEP 證明尺寸更新且保持有效單一實體。這個疑點已排除，未修改 cadgen 的快取機制。</p>
+<p>CAD 初次重建顯示 current，不能因此宣稱參數變更已經驗證。新增 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/tests/test_cad.py">子行程回歸測試</a>：暫存專案先輸出 100 mm STEP，再只改 JSON 為 80 mm，重新執行模型腳本，讀取實際匯出 STEP 證明尺寸更新且保持有效單一實體。這個疑點已排除，未修改 cadgen 的快取機制。</p>
 <p>HyperFrames 不指定 browser path 時，這台 ARM64 的 CLI 曾嘗試安裝 system Chromium，因權限不足而跳過 browser check；JSON 為 <code>ok:false</code>，CLI 卻回傳零。使用已有 Playwright Chromium 後重新 check 通過。沒有把跳過結果當作通過，也沒有為此另裝系統瀏覽器。</p>
 <h2>保留的警告與限制</h2>
 <ul>

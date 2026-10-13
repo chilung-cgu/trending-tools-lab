@@ -3,12 +3,15 @@
 <nav><a href="./index.html">← 回到成品入口</a></nav><main><h1>Trending 工具實驗室</h1>
 <p>把 GitHub Trending 上值得玩的開源工具，各做成一個可以打開、操作、重跑的小成果，並誠實記錄限制。第一期取自 2026-09-21 到 2026-10-12 四週的 Trending 快照，共 6 個工具實驗加 1 個多代理團隊實驗。</p>
 <p>資料來源是 <a href="https://github.com/chilung-cgu/github-trending-crawler">chilung-cgu/github-trending-crawler</a> 保存的快照。這些是歷史觀測，不是即時榜單。</p>
-<h2>打開成品</h2>
+<h2>線上瀏覽</h2>
+<p><strong><a href="https://chilung-cgu.github.io/trending-tools-lab/">https://chilung-cgu.github.io/trending-tools-lab/</a></strong> ：打開就能用，不需要安裝或下載任何東西。</p>
+<p>網站每次 main 更新時由 GitHub Actions 自動部署，內容只來自 repo 裡被追蹤的檔案。</p>
+<h2>在自己的電腦打開</h2>
 <pre><code class="language-sh">git clone https://github.com/chilung-cgu/trending-tools-lab.git
 cd trending-tools-lab
 python3 -m http.server 8765 --bind 127.0.0.1
 </code></pre>
-<p>開啟 <a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a> 。成品都已預先建置，可以直接瀏覽，不需要安裝任何工具。若是在遠端機器上，從自己的電腦建立 SSH tunnel：<code>ssh -N -L 8765:127.0.0.1:8765 你的主機</code>。</p>
+<p>開啟 <code>http://127.0.0.1:8765/</code> 。離線也能用，或想修改後立刻看效果時使用。</p>
 <table>
 <thead>
 <tr>
@@ -70,7 +73,7 @@ cd openrig &amp;&amp; npm ci &amp;&amp; cd ..     # OpenRig 0.6.10
 .venv/bin/python -m pytest -q
 node_modules/.bin/playwright test
 </code></pre>
-<p>各成果的專用建置腳本見 scripts/ 與對應教學。依賴版本由 package-lock.json、uv.lock、<a href="data/tool-sources.json">data/tool-sources.json</a> 固定。</p>
+<p>各成果的專用建置腳本見 scripts/ 與對應教學。依賴版本由 package-lock.json、uv.lock、<a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/data/tool-sources.json">data/tool-sources.json</a> 固定。</p>
 <h2>授權</h2>
 <p>原創程式與文件採用 MIT 授權，見 LICENSE。第三方元件與其授權見 <a href="NOTICE.html">NOTICE.md</a>。</p>
 <h2>下一步</h2>

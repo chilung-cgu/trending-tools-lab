@@ -7,7 +7,7 @@
 <p>本版沒有配音與背景音樂；輸出為 H.264、1280×720、24 fps、30 秒。每週顯示的是該日 GitHub Trending 的原始排名，不依 stars 數字重新排序。</p>
 <h2>它有什麼特色</h2>
 <p>HyperFrames 用 HTML/CSS 與可定位時間的 GSAP timeline 產生影片。修改排版像改網頁，renderer 則逐格設定時間並用 FFmpeg 編碼；它不是把螢幕錄影拼成假示範。本專案先把快照內容寫進 HTML、把 GSAP 存成本機資產，避免渲染時再抓榜單。</p>
-<p>影片由 <a href="../scripts/generate_video.py">generate_video.py</a> 生成；<a href="../video/index.html">video/index.html</a> 是可重建的輸出檔。請改 generator，否則下一次建置會蓋掉直接修改的 HTML。</p>
+<p>影片由 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/scripts/generate_video.py">generate_video.py</a> 生成；<a href="../video/index.html">video/index.html</a> 是可重建的輸出檔。請改 generator，否則下一次建置會蓋掉直接修改的 HTML。</p>
 <h2>修改與重新生成</h2>
 <p>從專案根目錄執行：</p>
 <pre><code class="language-sh">sh scripts/build_video.sh
@@ -30,5 +30,5 @@ hyperframes preview video --no-open
 <h2>已知限制與來源</h2>
 <p>只展示保存的四日快照，並非即時榜單。週／月滾動區間可能重疊，不能把 <code>period_stars</code> 跨期累加。缺席 Top 10 不代表 stars 為零。</p>
 <p>本次 ARM64 環境使用軟體 GPU 與 screenshot capture，沒有宣稱硬體加速。原生 lint 的七項 warning 是建議把六個場景拆成 sub-compositions 與降低同一 track 密度；不是影片編碼失敗。詳細結果保存在 <code>evidence/video/</code>。</p>
-<p>工具版本固定 <code>hyperframes@0.8.150</code>。契約查核來自 <a href="https://github.com/heygen-com/hyperframes/blob/main/skills/hyperframes-core/SKILL.html">HyperFrames 官方 core skill</a> 與已安裝版本的 CLI；相同品牌的舊 core 文件可能與目前的 duration 契約不同，重建請以 lockfile 與原生 CLI 為準。</p>
+<p>工具版本固定 <code>hyperframes@0.8.150</code>。契約查核來自 <a href="https://github.com/heygen-com/hyperframes/blob/main/skills/hyperframes-core/SKILL.md">HyperFrames 官方 core skill</a> 與已安裝版本的 CLI；相同品牌的舊 core 文件可能與目前的 duration 契約不同，重建請以 lockfile 與原生 CLI 為準。</p>
 </main></html>

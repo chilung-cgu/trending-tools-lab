@@ -7,7 +7,7 @@
 <pre><code class="language-sh">.venv/bin/python context/generate_fixture.py
 .venv/bin/python context/mcp_experiment.py
 </code></pre>
-<p>看終端中的單次與批次搜尋結果，再開啟 <a href="../evidence/context/benchmark.json">benchmark.json</a> 與 <a href="../evidence/context/mcp_receipts.json">完整收據</a>。三個案例分別模擬下載雜湊不符、seccomp 阻擋、DTS 語法錯誤；都是合成資料，不是你的真實硬體故障。</p>
+<p>看終端中的單次與批次搜尋結果，再開啟 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/evidence/context/benchmark.json">benchmark.json</a> 與 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/evidence/context/mcp_receipts.json">完整收據</a>。三個案例分別模擬下載雜湊不符、seccomp 阻擋、DTS 語法錯誤；都是合成資料，不是你的真實硬體故障。</p>
 <p>本版測得原始 log 為 213,030 UTF-8 bytes，三個 marker 的一次批次檢索輸出為 5,079 bytes。這兩個內容大小相差 97.62%，不代表整段 agent 對話或 API 費用減少相同比例；索引回應、三次個別搜尋、tool schema 與指令也會占用上下文。</p>
 <h2>特色與用法</h2>
 <p>context-mode 將文字切塊存入 SQLite FTS5，再回傳與查詢相關的片段。你可以先留完整 log 在磁碟，用關鍵字找到小段診斷，再回到原始檔核對。這比只看長 log 的尾端更容易找到分散的錯誤。</p>

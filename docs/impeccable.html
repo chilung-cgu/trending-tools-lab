@@ -6,7 +6,7 @@
 <p>在專案根目錄執行：</p>
 <pre><code class="language-sh">python3 -m http.server 8765 --bind 127.0.0.1
 </code></pre>
-<p>在同一台機器開啟 <a href="http://127.0.0.1:8765/web/">http://127.0.0.1:8765/web/</a>。若專案位於遠端 Linux，從自己的電腦另開終端建立 tunnel（替換帳號與主機）：</p>
+<p>在同一台機器開啟 <code>http://127.0.0.1:8765/web/</code>。若專案位於遠端 Linux，從自己的電腦另開終端建立 tunnel（替換帳號與主機）：</p>
 <pre><code class="language-sh">ssh -L 8765:127.0.0.1:8765 使用者@遠端主機
 </code></pre>
 <p>再於自己的瀏覽器開啟相同 URL。伺服器若已在執行，不必重複啟動。請從專案根目錄提供 HTTP 服務：直接雙擊 HTML 的 file 模式無法可靠 fetch 資料。</p>
@@ -20,7 +20,7 @@
 <p>載入失敗會指出檔案與啟動位置，按「重新載入」重新 fetch。資料文字不當作 HTML 解析。</p>
 <h2>玩法</h2>
 <p>選擇同一個 repo 的詳情，比較不同日期是否出現在週榜或月榜，再用來源核對。例如最新週榜的 <code>boykopovar/AnyPS5</code> 只有在確實觀測到的期間顯示數字；其餘列明確寫「未觀測」。搜尋 <code>video</code> 並切換週／月榜，可探索影片相關描述；若加上語言後無結果，先清除篩選再比較。</p>
-<p>修改 <a href="../web/style.css">style.css</a> 的 <code>:root</code> tokens 可實驗紙色、墨色與重點色；修改 <a href="../web/index.html">index.html</a> 可改介面文字；<a href="../web/app.js">app.js</a> 管理搜尋、篩選與安全 DOM。靜態 app 沒有編譯步驟，存檔後重新整理即可。換資料須由共用資料流程產生符合契約的 <a href="../data/index.json">index.json</a>，此 UI 不爬取 GitHub 或修改共享快照。</p>
+<p>修改 <a href="../web/style.css">style.css</a> 的 <code>:root</code> tokens 可實驗紙色、墨色與重點色；修改 <a href="../web/index.html">index.html</a> 可改介面文字；<a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/web/app.js">app.js</a> 管理搜尋、篩選與安全 DOM。靜態 app 沒有編譯步驟，存檔後重新整理即可。換資料須由共用資料流程產生符合契約的 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/data/index.json">index.json</a>，此 UI 不爬取 GitHub 或修改共享快照。</p>
 <h2>重建與驗證</h2>
 <p>以專案內 Node 工具鏈執行，無須安裝其他套件：</p>
 <pre><code class="language-sh">export PATH=&quot;$PWD/.tools/node/bin:$PATH&quot;

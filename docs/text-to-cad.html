@@ -33,7 +33,7 @@
 <td>A4 示範工程圖（包含第三角投影、視圖與標註）</td>
 </tr>
 <tr>
-<td><a href="../artifacts/cad/geometry.json">artifacts/cad/geometry.json</a> / <a href="../evidence/cad/snapshot.png">snapshot.png</a></td>
+<td><a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/artifacts/cad/geometry.json">artifacts/cad/geometry.json</a> / <a href="../evidence/cad/snapshot.png">snapshot.png</a></td>
 <td>驗證證據</td>
 <td>包含實體量測摘要 JSON 與 Playwright Chromium 原生快照</td>
 </tr>
@@ -45,7 +45,7 @@
 <li>雙重結構開槽（Cable Retention Slot）：
 示範下方 6.0 mm 通道與上方 3.5 mm 狹縫；實際能否卡入及保持取決於線徑、材料彈性與列印公差，尚未實測。</li>
 <li>嚴謹的參數化架構：
-所有幾何尺寸集中定義在 <a href="../cad/parameters.json">cad/parameters.json</a>，無多餘或未使用的假參數。</li>
+所有幾何尺寸集中定義在 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/cad/parameters.json">cad/parameters.json</a>，無多餘或未使用的假參數。</li>
 <li>A4 示範工程圖與投影：
 透過 <code>cadgen.eng_drawing</code> 產出 A4 橫式示範工程圖，自動自幾何物件投影 Top、Front、Right 及 Isometric 四視圖。材質標記為 <code>DEMO ONLY</code>，公差標記為 <code>UNSPECIFIED</code>，並包含「示範尺寸，未經量產驗證」註記，避免暗示具備製造認證。</li>
 </ol>
@@ -70,7 +70,7 @@ pytest -v tests/test_cad.py
 </code></pre>
 <p>驗收測試固定鎖定在基準預設值（100.0 × 30.0 × 15.0 mm）與精確定義的緊湊型函式變體（80.0 × 25.0 × 12.0 mm）。若自行修改 <code>parameters.json</code> 進行客製化外形實驗，測試套件會因基準尺寸比對不符而報錯；這屬於驗證預設基準的預期行為，不代表任意未受約束的自訂尺寸在實體製造上均屬可行。</p>
 <h2>參數修改說明</h2>
-<p><a href="../cad/parameters.json">cad/parameters.json</a> 控制預設模型外形：</p>
+<p><a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/cad/parameters.json">cad/parameters.json</a> 控制預設模型外形：</p>
 <table>
 <thead>
 <tr>
@@ -117,7 +117,7 @@ pytest -v tests/test_cad.py
 </tbody></table>
 <p>修改參數後請再次執行 <code>./scripts/build_cad.sh</code>，即可同步更新 STEP、STL、GLB、geometry.json 與示範工程圖。</p>
 <h2>實測幾何數據與驗證結果</h2>
-<p>使用預設參數建置之實測幾何數據（記錄於 <a href="../artifacts/cad/geometry.json">geometry.json</a>）：</p>
+<p>使用預設參數建置之實測幾何數據（記錄於 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/artifacts/cad/geometry.json">geometry.json</a>）：</p>
 <ul>
 <li>實體數量：1 個有效實體（Solid）</li>
 <li>實體體積：40865.195 mm³</li>

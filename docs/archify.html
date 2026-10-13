@@ -12,17 +12,17 @@
 </ul>
 <p>其他快捷鍵可按 <code>?</code> 查看圖內操作指引；例如 <code>/</code> 搜尋、<code>T</code> 主題、<code>R</code> 路徑探測、<code>0</code> 重設視野。</p>
 <h2>圖中的重要行為</h2>
-<p>圖以固定 commit <code>c169d08b730d4c995a0c83141565621f47e8ba12</code> 的程式碼為準。完整節點來源與行號存於 <a href="../data/crawler-source-mapping.json">source mapping</a>。</p>
+<p>圖以固定 commit <code>c169d08b730d4c995a0c83141565621f47e8ba12</code> 的程式碼為準。完整節點來源與行號存於 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/data/crawler-source-mapping.json">source mapping</a>。</p>
 <p>抓取每個 period 最多三次，失敗之間等待 2、4 秒；週榜或月榜失敗會產生 error／partial 快照，不用前期資料冒充新結果。只有 crawler exit code 為 0 才更新 <code>latest-success.json</code>。</p>
 <p><strong>有效的失敗快照仍先 commit／push。</strong> JSON 結構通過驗證後，CI 即使跳過成功快照複製，仍提交 <code>latest.json</code>。Git push 成功後才處理 crawler 失敗的 debug 上傳及 exit 1。若 JSON 驗證或 Git push 本身失敗，job 更早中止，後面的普通 steps 不會執行。</p>
 <p>這也是獨立審查找到並修正的圖表契約差異。靜態圖表示可能的控制流程，無法替代每次 GitHub Actions 的執行紀錄，也不會替你 commit 或 push。</p>
 <h2>修改與重新生成</h2>
-<p>改 <a href="../diagrams/crawler.workflow.json">crawler.workflow.json</a>，再從專案根目錄執行：</p>
+<p>改 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/diagrams/crawler.workflow.json">crawler.workflow.json</a>，再從專案根目錄執行：</p>
 <pre><code class="language-sh">sh scripts/build_archify.sh
 </code></pre>
 <p>腳本使用固定版本的 <code>vendor/archify/archify/bin/archify.mjs</code>，依序通過原生 validate、deliver、check、browser-check，並保存 HTML、截圖及 sidecar receipts。幾條例外路徑使用明確座標，改節點位置後需要一併調整；原生 showcase 閘門會檢查交叉、遮擋與閱讀尺寸。</p>
 <p>建置 wrapper 在閘門返回失敗或 Python 可捕捉的例外時還原上一份 HTML 與 sidecars；已有會故意破壞輸出的回歸測試。此機制不能保證遭 SIGKILL、斷電或磁碟損壞時復原，也不支援同一輸出目錄的平行 writer。</p>
 <h2>來源與限制</h2>
 <p>Archify 原生 repo-root evidence 要求 origin 與公開 repo URL 一致；這份 vendor clone 的 origin 是本機研究 checkout。沒有偽造原生 provenance 成功，而是另存固定 commit 的 source mapping。原生图表幾何門禁通過，與來源對照驗證是兩件事。</p>
-<p>成品包包含已生成圖，不包含原生引擎。重新建置需要來源檔：<a href="https://github.com/tt-a1i/archify">Archify 官方 repo</a>，本次 commit 見 <a href="../data/tool-sources.json">tool-sources.json</a>，以及本專案 Node 22、Playwright Chromium。</p>
+<p>成品包包含已生成圖，不包含原生引擎。重新建置需要來源檔：<a href="https://github.com/tt-a1i/archify">Archify 官方 repo</a>，本次 commit 見 <a href="https://github.com/chilung-cgu/trending-tools-lab/blob/main/data/tool-sources.json">tool-sources.json</a>，以及本專案 Node 22、Playwright Chromium。</p>
 </main></html>

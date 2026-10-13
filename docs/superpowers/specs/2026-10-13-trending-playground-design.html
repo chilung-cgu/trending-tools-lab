@@ -1,0 +1,36 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../../../index.html">← 回到成品入口</a></nav><main><h1>GitHub Trending 工具實驗室設計</h1>
+<h2>目的與授權</h2>
+<p>使用者要實踐最近四週 Trending 中感興趣的工具，排除 OpenRig；授權主代理自主安排環境、worktree、子代理、實作與驗證。每項成果必須可操作、可重跑，提供繁體中文功能、用途、玩法與限制。既有帳號、全域 agent 規則及 crawler 遠端分支維持原狀。這是全新、獨立的本機實驗專案，不部署或發布。</p>
+<h2>選擇的方案</h2>
+<p>採用一個主專案與獨立成果目錄；同一份真實 Trending 快照供 UI、動畫與搜尋實驗使用。相較於每個工具建立無關專案，此方案減少重複準備資料，仍以目錄和獨立重建指令隔離功能。相較於直接修改 crawler，實驗不會影響排程及生產資料。</p>
+<p>目前 session 統籌、審查與整合。Gemini 子代理只接受明確的寫入目錄與輸入輸出契約。若本機 GPT-6.1 Sol medium 實際可用，另開 CLI session 執行有限任務或獨立審查；不宣稱跨 provider 工作消耗 Codex 訂閱。Luna 若使用，只能 max；未驗證可用時不替換成較低 effort。</p>
+<h2>環境</h2>
+<p>已盤點：Ubuntu Linux aarch64；Node 20.20.2；uv 0.11.26；Codex 0.162.1；磁碟可用約 65 GB。採用專案內 Node 22 工具鏈，npm 依賴固定版本及 lockfile。CAD 使用專案 .venv／uv。所有 server 綁定 loopback，使用者透過 SSH port forwarding 操作。外部來源程式先讀 skill、安裝入口與腳本；不執行未知全域 hooks。</p>
+<h2>共同資料契約</h2>
+<p>來源為 chilung-cgu/github-trending-crawler 的 Git 歷史；日期 2026-09-21、2026-09-28、2026-10-05、2026-10-12，每日取最後一次成功快照。原始 JSON 原樣保存，另產生 index.json，含 commit、generated_at、weekly/monthly items。</p>
+<p>週榜和月榜分開。缺席 Top 10 表示未觀測，不能當作 stars=0。不同快照的 period_stars 不相加。檔案含明確日期、Git commit 及來源 URL；畫面不能稱為即時榜單。固定測試集必須包含日期切換、空搜尋、榜單切換與名稱搜尋。</p>
+<h2>六項成果及完成標準</h2>
+<h3>1. Impeccable：Trending 探索器</h3>
+<p><code>web/</code> 提供無帳號、無資料庫的靜態應用：日期選擇、週/月榜、文字搜尋、語言過濾、repo 詳細資訊與跨快照上榜紀錄；來源與擷取時間始終可見。用 Impeccable skill 的規劃／audit／polish 實踐，保存 detector 原始 JSON 與人工視覺 review。不得把 detector 通過說成完整 accessibility 證明。</p>
+<p>完成標準：1920x1080、1280x800、390x844 真實 Chromium 測試；日期切換後 rank/name/count 正確；沒有橫向 overflow；搜尋不到顯示空狀態；所有 repo 連結來源受限於 GitHub；保留 screenshots。</p>
+<h3>2. Archify：Crawler 工作流程與資料流</h3>
+<p>使用原生 Archify schema／renderer 產生 <code>artifacts/archify/</code> 獨立 HTML。至少一張 workflow：排程、HTTP、freshness、解析、驗證、成功／失敗輸出、重試。原始碼證據以 crawler 的固定 commit 與實際函式為準，不憑 README 猜行為。保存 JSON IR、驗證 receipt 與瀏覽器 screenshot。</p>
+<p>完成標準：原生 validate／finalize 的可用品質閘門；瀏覽器節點或路徑互動；可重建 HTML；失敗不得覆蓋最後成功 artifact。</p>
+<h3>3. HyperFrames：四週 Trending 動畫</h3>
+<p>使用真正 HyperFrames CLI 與 HTML composition 在本機渲染 30 秒 1280x720 MP4，分四週畫面。第一版無外部音樂、無配音；避免額外服務。顯示 snapshot dates、資料來源及 rolling-window 限制。保存影片來源、重建指令、lint 結果與關鍵 frame screenshots。</p>
+<p>完成標準：ffprobe 證明尺寸、時長和 video stream；用實際 renderer 輸出 MP4；檢查開頭、中段、結尾畫面；數字可對照共同 JSON。CPU render 不視為 Codex token 用量。</p>
+<h3>4. text-to-cad：參數化桌面線材整理架</h3>
+<p>使用 cadgen／build123d 的真實本機 CAD 流程，產生三條線槽的桌面整理架；尺寸為示範設計，不代表任何真實板型。參數以 JSON 或 CLI 管理：外形寬、深、高、線槽直徑與間距。產出 STEP、STL（可行時 GLB）、尺寸摘要及預覽／工程圖。任何製造適用性都需實測，不保證可直接生產。</p>
+<p>完成標準：ARM64 套件真實安裝；模型至少一個有效 solid、volume &gt; 0、bbox 與設計相符；第二組参数可重建且產出改變；禁止為了宣稱完成而用普通 HTML 圖替代 CAD。若 ARM wheel 不可用，追查合理替代本機流程並如實記錄限制。</p>
+<h3>5. context-mode：合成建置 log 搜尋實驗</h3>
+<p>使用真實 context-mode MCP server 的 initialize、tools/list、index/search/stats 等實際工具。以明確標示合成的 BitBake-like log 作為非私人測試資料，包含三個已知錯誤、重複雜訊與 Unicode。原始 full log、精簡檢索輸出和測量 JSON 均保存。</p>
+<p>完成標準：真實 MCP tool results；搜尋能找出三個已知錯誤及上下文；記錄 UTF-8 bytes／characters，而非冒稱精確 token；區分 MCP 可用與 hooks 已啟用。本實驗不改 ~/.codex/config.toml 或全域 AGENTS。提供後續 opt-in 整合步驟。</p>
+<h3>6. Worktrunk：隔離工作練習</h3>
+<p>先用 Git 建立隔離實作 branch/worktree；再安裝專案內 ARM64 Worktrunk binary，以實際 wt list／worktree 操作形成練習。展示兩個分支的檔案隔離與狀態；練習只在本專案，不自動 merge、rebase 或刪除使用者分支。保留教學與證據。</p>
+<h2>教學及總入口</h2>
+<p>README 與 <code>docs/</code> 使用繁體中文，每项说明「開啟方式、功能操作、修改玩法、特色、重建／驗證、限制」。入口頁連結所有可直接觀看 artifacts 與教學。提供本機啟動腳本和 SSH tunnel 命令；不假設遠端 URL 在使用者電腦直接可達。</p>
+<h2>驗證與交付</h2>
+<p>資料處理採行為測試，先看失敗再實作；UI 採真實 browser 流程。CAD、影片、MCP 用對應原生工具驗證，不能以檔案存在代替功能正常。主代理審查每個 worker diff、結果與截图；最後另做獨立 review，修正具體問題再交付。依賴、來源 commits、執行命令、環境限制與未通過項目保存在 evidence 和 progress ledger。</p>
+</main></html>
