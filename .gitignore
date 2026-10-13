@@ -31,3 +31,10 @@ evidence/worktrunk/*
 !evidence/cad
 evidence/cad/*
 !evidence/cad/snapshot.png
+!evidence/impeccable
+evidence/impeccable/*
+!evidence/impeccable/index.html
+!evidence/impeccable/review.md
+!evidence/impeccable/detect.json
+!evidence/impeccable/concept-seed.txt
+!evidence/impeccable/worker.config.js
