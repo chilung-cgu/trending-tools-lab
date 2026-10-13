@@ -31,12 +31,12 @@ def is_local(target):
     return not target.startswith(('http://', 'https://', 'mailto:', 'data:', '//'))
 
 
-def test_site_has_nojekyll_marker_or_pages_workflow_that_bypasses_jekyll():
-    workflow = ROOT / '.github/workflows/pages.yml'
-    assert workflow.exists()
-    text = workflow.read_text()
-    assert 'actions/deploy-pages' in text and 'actions/upload-pages-artifact' in text
-    assert (ROOT / '.nojekyll').exists(), 'Jekyll would drop the hidden .openrig stub scripts'
+def test_workflow_publishes_hidden_files_the_openrig_demo_needs():
+    """upload-pages-artifact 預設排除以點開頭的檔案；openrig 席位劇本在 .openrig/ 目錄，必須明確放行。"""
+    workflow = (ROOT / '.github/workflows/pages.yml').read_text()
+    assert 'actions/deploy-pages' in workflow and 'actions/upload-pages-artifact' in workflow
+    assert 'include-hidden-files: true' in workflow
+    assert (ROOT / 'openrig/rigs/trending-desk/seats/lead/.openrig/stub/script.json').exists()
 
 
 def test_no_root_absolute_urls_that_break_under_the_repo_subpath():
