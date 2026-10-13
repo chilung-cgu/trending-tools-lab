@@ -1,0 +1,70 @@
+==================================================================
+Worktrunk Worktree Isolation Demo
+==================================================================
+Timestamp: 2026-10-13T06:23:19Z
+Host Architecture: aarch64
+Project Root: /home/ubuntu/worktrees/trending-tools-lab
+Worktrunk Binary: /home/ubuntu/worktrees/trending-tools-lab/.tools/wt/wt
+Demo Unique Branch: demo-wt-1791872599-2480590
+Demo Unique File:   ISOLATED_MODULE_1791872599_2480590.py
+wt v0.80.0
+
+[Step 1] Verifying Git Identity:
+  - user.name:  chilung
+  - user.email: b0423031@gmail.com
+
+[Step 2] Initial Worktree Status via 'wt list':
+  Branch                   Status      HEAD±     main↕    main…±    Remote⇅  Path                                                   Commit    Age  Message
+@ lab/trending-tools        !?⚑–       +∞   -5                               ../worktrees/trending-tools-lab                        b6105a0    2h  docs: plan trending tool experiments
+^ main                         ^                                             .                                                      b6105a0    2h  docs: plan trending tool experiments
++ demo-worktree-isolation    ? –       +5                                    ../github-trending-playground.demo-worktree-isolation  b6105a0    2h  docs: plan trending tool experiments
+
+○ Showing 3 worktrees, 2 with changes
+
+[Step 3] Creating isolated demo worktree: 'demo-wt-1791872599-2480590'...
+✓ Created branch demo-wt-1791872599-2480590 from lab/trending-tools and worktree @ ~/github-trending-playground.demo-wt-1791872599-2480590
+  - Create result: {"action":"created","branch":"demo-wt-1791872599-2480590","path":"/home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590","created_branch":true,"base_branch":"lab/trending-tools"}
+  - Worktree directory created at: /home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590
+
+[Step 4] Querying worktree status in JSON format ('wt list --format json')...
+  - Saved full JSON status to: /home/ubuntu/worktrees/trending-tools-lab/evidence/worktrunk/wt_list.json
+
+[Step 5] Creating isolated feature file inside '/home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590'...
+  - File created: /home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590/ISOLATED_MODULE_1791872599_2480590.py
+
+[Step 6] Asserting Worktree Isolation Across All Existing Worktrees:
+  [✓] Assertion 1 Passed: ISOLATED_MODULE_1791872599_2480590.py exists in demo worktree: /home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590
+  [✓] Verified absent in: /home/ubuntu/github-trending-playground
+  [✓] Verified absent in: /home/ubuntu/github-trending-playground.demo-worktree-isolation
+  [✓] Verified absent in: /home/ubuntu/worktrees/trending-tools-lab
+  - Total sibling worktrees verified clean: 3
+
+[Step 7] Clean teardown of our own ephemeral demo worktree without force:
+  - Removed demo file: /home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590/ISOLATED_MODULE_1791872599_2480590.py
+◎ Removing demo-wt-1791872599-2480590 worktree...
+✓ Removed demo-wt-1791872599-2480590 worktree & branch (same commit as main, _) (5 files · 12.8 KiB)
+[
+  {
+    "branch": "demo-wt-1791872599-2480590",
+    "branch_checked_out_at": null,
+    "branch_outcome": "deleted",
+    "kind": "worktree",
+    "path": "/home/ubuntu/github-trending-playground.demo-wt-1791872599-2480590"
+  }
+]
+  - Successfully removed demo worktree: demo-wt-1791872599-2480590
+
+[Step 8] Final worktree status after demo:
+  Branch                   Status      HEAD±     main↕    main…±    Remote⇅  Path                                                   Commit    Age  Message
+@ lab/trending-tools        !?⚑–       +∞   -5                               ../worktrees/trending-tools-lab                        b6105a0    2h  docs: plan trending tool experiments
+^ main                         ^                                             .                                                      b6105a0    2h  docs: plan trending tool experiments
++ demo-worktree-isolation    ? –       +5                                    ../github-trending-playground.demo-worktree-isolation  b6105a0    2h  docs: plan trending tool experiments
+
+○ Showing 3 worktrees, 2 with changes
+==================================================================
+Worktree Isolation Demo Completed Successfully!
+Evidence files:
+  - Log:       /home/ubuntu/worktrees/trending-tools-lab/evidence/worktrunk/worktrunk_demo.log
+  - Evidence:  /home/ubuntu/worktrees/trending-tools-lab/evidence/worktrunk/isolation_evidence.txt
+  - List JSON: /home/ubuntu/worktrees/trending-tools-lab/evidence/worktrunk/wt_list.json
+==================================================================

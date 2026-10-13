@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "tool": "context-mode@1.0.169",
+  "node_runtime": "/home/ubuntu/worktrees/trending-tools-lab/.tools/node/bin/node",
+  "architecture": "linux-aarch64",
+  "benchmark_timestamp": "2026-10-13T06:32:15Z",
+  "fixture": {
+    "path": "context/bitbake_synthetic_build.log",
+    "synthetic": true,
+    "contains_private_data": false,
+    "markers": [
+      "BB_ERR_BBAP_FETCH_HASH_MISMATCH_9841",
+      "BB_ERR_SYSCALL_SECCOMP_BLOCKED_4412",
+      "BB_ERR_DEVICE_TREE_DTC_SYNTAX_7719"
+    ]
+  },
+  "metrics": {
+    "full_log": {
+      "lines": 2224,
+      "utf8_bytes": 213030,
+      "characters": 203678
+    },
+    "retrieved_batch": {
+      "utf8_bytes": 5079,
+      "characters": 4289
+    },
+    "retrieved_individual": {
+      "marker_1_bytes": 1804,
+      "marker_1_chars": 1552,
+      "marker_2_bytes": 1787,
+      "marker_2_chars": 1523,
+      "marker_3_bytes": 1812,
+      "marker_3_chars": 1534
+    },
+    "savings": {
+      "byte_reduction_ratio": 0.9762,
+      "byte_reduction_percent": 97.62,
+      "char_reduction_ratio": 0.9789,
+      "char_reduction_percent": 97.89,
+      "bytes_saved": 207951,
+      "characters_saved": 199389
+    }
+  },
+  "contract_compliance": {
+    "bytes_are_not_tokens": true,
+    "chars_are_not_tokens": true,
+    "no_token_impersonation": true,
+    "distinction_explicitly_documented": true,
+    "all_markers_verified": true,
+    "surrounding_context_verified": true
+  },
+  "server_stats_raw": "53.3K tokens saved  ·  95.2% reduction  ·  < 1 min  ·  ~$0.27 saved (Opus)\n\nWithout context-mode  |████████████████████████████████████████| 218 KB\nWith context-mode     |██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░| 10.4 KB\n\n208 KB kept out of your conversation — 21× longer sessions before compact.\n\n5 calls\n\n  ctx_search                 4 calls    204 KB saved\n  ctx_index                  1 calls    4.0 KB saved\n\nPersistent memory  ✓ preserved across compact, restart & upgrade\n  0 events · 1 session · ~$0.27 saved lifetime\n\n\n─────────────────────────────────────────────────────────────────\nYour AI talks less, remembers more, costs less.\n$0.27 this session  ·  $0.27 lifetime\n─────────────────────────────────────────────────────────────────\n\nv1.0.169"
+}

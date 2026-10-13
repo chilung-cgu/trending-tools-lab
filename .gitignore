@@ -17,3 +17,17 @@ artifacts/archify/*.json
 evidence/*
 !evidence/verification.json
 !evidence/re-review-source.json
+# evidence 內的子目錄先整個忽略，再逐檔放行教學實際引用的檔案。
+!evidence/context
+evidence/context/*
+!evidence/context/index.html
+!evidence/context/benchmark.json
+!evidence/context/mcp_receipts.json
+!evidence/worktrunk
+evidence/worktrunk/*
+!evidence/worktrunk/index.html
+!evidence/worktrunk/isolation_evidence.txt
+!evidence/worktrunk/worktrunk_demo.log
+!evidence/cad
+evidence/cad/*
+!evidence/cad/snapshot.png
