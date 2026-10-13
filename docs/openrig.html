@@ -1,0 +1,40 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>OpenRig：把多個編碼代理組成一支團隊</h1>
+<p>這個成果把 <a href="https://github.com/mvschwarz/openrig">OpenRig</a>（Apache-2.0）實際跑在隔離環境裡：三個席位、三次佇列交接、關閉後還原，並附上真實的儀表板截圖與原始紀錄。目前固定版本是 0.6.10。</p>
+<h2>先回答你一開始的疑問</h2>
+<p>OpenRig <strong>不需要多個 Codex 帳號</strong>。官方 README 寫明可以只用 Claude Code、只用 Codex，或兩者都用，不需要第二份訂閱。本實驗使用的 stub 席位不呼叫模型，因此連登入都不需要。</p>
+<h2>它是什麼</h2>
+<p>OpenRig 管理的是代理之間形成的「系統」，不是代理本身：哪些 tmux 工作階段在跑、彼此如何交接工作、重開機後怎麼還原。你用 YAML 描述團隊，用 <code>rig up</code> 啟動，之後可以送訊息、交接工作、查看狀態、關閉並還原。</p>
+<h2>先看成果</h2>
+<p>在專案根目錄執行 <code>sh scripts/serve.sh</code>，開啟入口的「OpenRig 多代理團隊實驗場」，或直接開 <a href="../artifacts/openrig/index.html">成果頁</a>。頁面顯示：</p>
+<ul>
+<li>真實儀表板截圖：triage 團隊的 lead、scout、reviewer 三個席位。</li>
+<li>三次佇列交接的真實狀態（lead → scout → reviewer → lead）。</li>
+<li>關閉後還原的兩種結果：沒加 <code>--fresh</code> 時三席停在「等待你決定」，加了之後才重新啟動。</li>
+<li><code>rig send --verify</code> 只代表訊息出現在目標終端，不代表代理讀到或回覆。</li>
+</ul>
+<h2>自己重跑</h2>
+<pre><code class="language-sh">cd openrig &amp;&amp; npm ci          # 固定安裝 @openrig/cli 0.6.10
+cd ..
+bash scripts/openrig_demo.sh --out /tmp/openrig-run --shots
+</code></pre>
+<p>需要 Node 22（專案內 <code>.tools/node</code> 已提供）與系統的 tmux。輸出目錄必須不存在或為空；若已有內容，腳本會拒絕並保留原檔。完成後看 <code>/tmp/openrig-run/run.json</code>（整理後的結果）與 <code>raw/</code>（每個命令的原始輸出）。</p>
+<h2>隔離與清理</h2>
+<p>腳本把 HOME、OPENRIG_HOME、CODEX_HOME、CLAUDE_CONFIG_DIR 與 tmux socket 都指到輸出目錄或暫存目錄，daemon 只綁定 127.0.0.1 的隨機埠。官方文件說明 OpenRig 平常會改寫 <code>~/.codex/config.toml</code>、<code>~/.claude/skills</code>、<code>~/.tmux.conf</code> 等檔案；本實驗在執行前後比對這些檔案，全部未變動。結束時腳本會刪除團隊、停止 daemon、關閉專用 tmux 並刪除暫存。</p>
+<h2>怎麼玩</h2>
+<ol>
+<li>改 <a href="../openrig/rigs/trending-desk/rig.yaml">團隊定義</a>：新增第四個席位或改邊（<code>delegates_to</code>、<code>escalates_to</code>），再用 <code>rig spec validate</code> 驗證。</li>
+<li>改席位的 <code>seats/*/.openrig/stub/script.json</code>，讓它在啟動時印出不同文字，觀察 <code>rig capture</code>。</li>
+<li>手動接力：在示範中途暫停，用 <code>rig queue list</code> 與 <code>rig queue show</code> 看每一棒的狀態與 transitions。</li>
+<li>若你想接上真實代理，先讀官方 README 的「What OpenRig changes on your machine」，再用 <code>rig setup --dry-run</code> 預覽；它會改動你的全域設定，不要在重要環境直接跑。</li>
+</ol>
+<h2>實測限制</h2>
+<ul>
+<li>stub 不呼叫模型，也不讀取輸入；只能證明 tmux、daemon、SQLite 與 CLI 的團隊機制，不能證明代理的判斷或對話品質。</li>
+<li>沒有測 Claude Code 或 Codex 真實席位、herdr、cmux、跨主機與重開機後還原。</li>
+<li>網頁介面被官方標示為維護模式，命令列才是主要介面。</li>
+<li>官方文件指出 stub 席位沒有可續接的 session 狀態（resume token），所以還原需要 <code>--fresh</code>；真實席位的還原行為沒有實測。</li>
+<li>資料來源：OpenRig v0.6.10 官方 README、docs/reference 與 test-layers；版本以 <code>openrig/package-lock.json</code> 為準。</li>
+</ul>
+</main></html>

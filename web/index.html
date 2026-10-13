@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f3eb">
+  <meta name="description" content="探索四週 GitHub Trending 歷史快照，依日期、週月榜與語言篩選，核對專案觀測紀錄與來源。">
+  <title>Trending 觀測簿 — GitHub 專案探索</title>
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#explorer">跳到專案清單</a>
+  <main>
+    <header class="masthead">
+      <div>
+        <h1>Trending 觀測簿<span class="title-dot" aria-hidden="true">.</span></h1>
+        <p class="intro">從一週的熱度，找到下一個值得研究的專案。</p>
+      </div>
+      <p class="edition">GitHub Trending 歷史快照<br><span id="date-range">正在讀取觀測日期</span></p>
+    </header>
+    <section id="explorer" aria-label="Trending 專案探索">
+      <div class="controls">
+        <div class="control-pair">
+          <div class="field"><label for="snapshot-date">快照日期</label><select id="snapshot-date" disabled></select></div>
+          <div class="field"><label for="period">榜單週期</label><select id="period" disabled><option value="weekly">週榜</option><option value="monthly">月榜</option></select></div>
+        </div>
+        <div class="control-pair search-pair">
+          <div class="field search-field"><label for="search">搜尋專案</label><input id="search" type="search" placeholder="名稱或描述關鍵字" disabled></div>
+          <div class="field"><label for="language">程式語言</label><select id="language" disabled><option value="">所有語言</option></select></div>
+        </div>
+      </div>
+      <div id="provenance" class="provenance"></div>
+      <div id="load-state" role="status">正在載入歷史快照…</div>
+      <div id="error-state" role="alert" hidden><h2>無法載入快照</h2><p>請確認從專案根目錄啟動伺服器，並可讀取 data/index.json。</p><button id="retry" type="button">重新載入</button></div>
+      <section id="details" aria-label="專案詳細資訊" hidden>
+        <div class="detail-heading"><div><h2 id="detail-title" tabindex="-1"></h2><p id="detail-description"></p></div><button id="close-detail" type="button">收起詳情</button></div>
+        <div id="detail-facts" class="detail-facts"></div>
+        <h3>跨快照觀測紀錄</h3>
+        <p class="history-note">週榜與月榜各自記錄。未進入該快照 Top 10 表示「未觀測」，不代表 stars 為零。</p>
+        <table class="history-table"><caption class="visually-hidden">各快照週榜與月榜的排名和期間新增 stars</caption><thead><tr><th scope="col">快照 / 榜單</th><th scope="col">排名</th><th scope="col">期間新增</th><th scope="col">來源</th></tr></thead><tbody id="history-body"></tbody></table>
+      </section>
+      <div class="list-heading"><h2 id="list-title">專案清單</h2><p id="result-count" role="status" aria-live="polite"></p></div>
+      <table id="repo-table" class="repo-table"><caption class="visually-hidden">依來源排名排列的 GitHub Trending 專案</caption><thead><tr><th scope="col">排名</th><th scope="col">專案 / 描述</th><th scope="col">語言</th><th id="stars-heading" scope="col">本週新增 stars</th><th scope="col">探索</th></tr></thead><tbody id="repo-body"></tbody></table>
+      <div id="empty-state" hidden><h3>找不到符合的專案</h3><p>試試其他名稱或描述，或清除搜尋與語言篩選。</p><button id="clear-filters" type="button">清除篩選</button></div>
+    </section>
+    <footer><p>這是歷史 Top 10 觀測，不是即時榜單。期間新增 stars 為滾動週／月窗口，各期數字不累加。</p><a href="../docs/impeccable.md">操作與實驗指南</a></footer>
+  </main>
+</body>
+</html>

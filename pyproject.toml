@@ -1,0 +1,10 @@
+[project]
+name = "trending-tools-lab"
+version = "0.1.0"
+description = "Trending tools lab Python environment for CAD"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cadgen==0.7.21",
+    "pytest>=8.0.0",
+]

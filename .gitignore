@@ -4,10 +4,16 @@ node_modules/
 vendor/
 .worktrees/
 .superpowers/
+.sandbox/
 __pycache__/
 .pytest_cache/
 test-results/
 playwright-report/
 *.log
-artifacts/
-evidence/
+# 成品目錄中只保留可直接開啟的成果；打包的 ZIP 與工作暫存不進 Git。
+artifacts/*.zip
+# 原生閘門收據含本機絕對路徑，只在本機保留；公開內容以 crawler.html 與截圖為準。
+artifacts/archify/*.json
+evidence/*
+!evidence/verification.json
+!evidence/re-review-source.json

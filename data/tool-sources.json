@@ -1,0 +1,18 @@
+{
+  "impeccable": {
+    "url": "https://github.com/pbakaus/impeccable",
+    "commit": "245ad82def45831dc56a21b683c7a1ff530b06cc"
+  },
+  "archify": {
+    "url": "https://github.com/tt-a1i/archify",
+    "commit": "58ab0b98d2d0def8e49dced705c7b566936723ec"
+  },
+  "crawler": {
+    "url": "https://github.com/chilung-cgu/github-trending-crawler",
+    "commit": "c169d08b730d4c995a0c83141565621f47e8ba12"
+  },
+  "text-to-cad": {
+    "url": "https://github.com/earthtojake/text-to-cad",
+    "commit": "a499253845c717e5144471ca75f9eb0f90e7964f"
+  }
+}

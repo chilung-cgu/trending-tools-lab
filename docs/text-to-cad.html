@@ -1,0 +1,141 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>text-to-cad：參數化桌面線材整理架與本機 CAD 流程</h1>
+<p>本任務實作真實的本機 CAD 模型建置與輸出流程，使用 cadgen 與 build123d 幾何核心，產出具備三條線槽的桌面線材整理架（Desktop Cable Organizer）。模型支援 STEP、STL、GLB 多格式匯出、真實幾何量測摘要（geometry.json）、A4 示範工程圖 PDF（第三角投影）以及無頭瀏覽器產出之真實視圖快照。</p>
+<h2>成品與入口清單</h2>
+<p>所有建置產物均輸出至專案標準目錄，不使用任何假圖或純 HTML 替代：</p>
+<table>
+<thead>
+<tr>
+<th>檔案路徑</th>
+<th>類型</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="../artifacts/cad/index.html">artifacts/cad/index.html</a></td>
+<td>Web 3D</td>
+<td>互動檢視入口（由主代理實作本機 Three.js GLB viewer）</td>
+</tr>
+<tr>
+<td><a href="../artifacts/cad/cable_organizer.step">artifacts/cad/cable_organizer.step</a></td>
+<td>3D CAD</td>
+<td>標準 STEP 模型檔案（包含封閉實體幾何與完整拓撲）</td>
+</tr>
+<tr>
+<td><a href="../artifacts/cad/cable_organizer.stl">artifacts/cad/cable_organizer.stl</a> / <a href="../artifacts/cad/cable_organizer.glb">.glb</a></td>
+<td>網格檔案</td>
+<td>STL 用於 3D 列印切片；GLB 為二進位 glTF 2.0 供 Web 預覽</td>
+</tr>
+<tr>
+<td><a href="../artifacts/cad/cable_organizer_drawing.pdf">artifacts/cad/cable_organizer_drawing.pdf</a></td>
+<td>圖面文件</td>
+<td>A4 示範工程圖（包含第三角投影、視圖與標註）</td>
+</tr>
+<tr>
+<td><a href="../artifacts/cad/geometry.json">artifacts/cad/geometry.json</a> / <a href="../evidence/cad/snapshot.png">snapshot.png</a></td>
+<td>驗證證據</td>
+<td>包含實體量測摘要 JSON 與 Playwright Chromium 原生快照</td>
+</tr>
+</tbody></table>
+<h2>核心設計與特色</h2>
+<ol>
+<li>真實實體建構（Single Solid）：
+模型由矩形基座經由四邊垂直圓角與三道對稱開槽差集構成，經 OpenCASCADE 核心驗證為單一連續封閉實體（solid count = 1，volume &gt; 0）。</li>
+<li>雙重結構開槽（Cable Retention Slot）：
+示範下方 6.0 mm 通道與上方 3.5 mm 狹縫；實際能否卡入及保持取決於線徑、材料彈性與列印公差，尚未實測。</li>
+<li>嚴謹的參數化架構：
+所有幾何尺寸集中定義在 <a href="../cad/parameters.json">cad/parameters.json</a>，無多餘或未使用的假參數。</li>
+<li>A4 示範工程圖與投影：
+透過 <code>cadgen.eng_drawing</code> 產出 A4 橫式示範工程圖，自動自幾何物件投影 Top、Front、Right 及 Isometric 四視圖。材質標記為 <code>DEMO ONLY</code>，公差標記為 <code>UNSPECIFIED</code>，並包含「示範尺寸，未經量產驗證」註記，避免暗示具備製造認證。</li>
+</ol>
+<h2>建置與測試指令</h2>
+<p>本模組使用專案專屬之 Python 3.13 虛擬環境（.venv）與固定的 cadgen 0.7.21 版本。</p>
+<h3>1. 執行完整建置</h3>
+<p>從專案根目錄執行建置腳本：</p>
+<pre><code class="language-bash">./scripts/build_cad.sh
+</code></pre>
+<p>建置腳本將依序執行：</p>
+<ul>
+<li>載入環境變數（CADGEN_TELEMETRY=0、CADGEN_UPDATE_CHECK=0、DO_NOT_TRACK=1）</li>
+<li>執行 <code>cad/cable_organizer.py</code> 產出 STEP、STL 與 GLB</li>
+<li>呼叫 OpenCASCADE 核心量測實體體積與邊界框，寫入 <code>artifacts/cad/geometry.json</code></li>
+<li>執行 <code>cad/cable_organizer_drawing.py</code> 產出 <code>artifacts/cad/cable_organizer_drawing.pdf</code></li>
+<li>執行 <code>cadgen step snapshot</code> 渲染真實視圖快照至 <code>evidence/cad/snapshot.png</code></li>
+</ul>
+<h3>2. 執行自動化行為測試</h3>
+<p>從專案根目錄執行 pytest：</p>
+<pre><code class="language-bash">source .venv/bin/activate
+pytest -v tests/test_cad.py
+</code></pre>
+<p>驗收測試固定鎖定在基準預設值（100.0 × 30.0 × 15.0 mm）與精確定義的緊湊型函式變體（80.0 × 25.0 × 12.0 mm）。若自行修改 <code>parameters.json</code> 進行客製化外形實驗，測試套件會因基準尺寸比對不符而報錯；這屬於驗證預設基準的預期行為，不代表任意未受約束的自訂尺寸在實體製造上均屬可行。</p>
+<h2>參數修改說明</h2>
+<p><a href="../cad/parameters.json">cad/parameters.json</a> 控制預設模型外形：</p>
+<table>
+<thead>
+<tr>
+<th>參數名稱</th>
+<th>預設值</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>width</code></td>
+<td>100.0 mm</td>
+<td>基座總寬度（X 軸跨度）</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>30.0 mm</td>
+<td>基座總深度（Y 軸跨度）</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>15.0 mm</td>
+<td>基座總高度（Z 軸跨度）</td>
+</tr>
+<tr>
+<td><code>slot_diameter</code></td>
+<td>6.0 mm</td>
+<td>下方圓柱收納通道直徑</td>
+</tr>
+<tr>
+<td><code>spacing</code></td>
+<td>24.0 mm</td>
+<td>相鄰兩槽中心間距（分布於 -spacing、0、+spacing）</td>
+</tr>
+<tr>
+<td><code>slot_entry_width</code></td>
+<td>3.5 mm</td>
+<td>上方開口狹縫寬度</td>
+</tr>
+<tr>
+<td><code>fillet_radius</code></td>
+<td>3.0 mm</td>
+<td>四個垂直轉角的圓角半徑</td>
+</tr>
+</tbody></table>
+<p>修改參數後請再次執行 <code>./scripts/build_cad.sh</code>，即可同步更新 STEP、STL、GLB、geometry.json 與示範工程圖。</p>
+<h2>實測幾何數據與驗證結果</h2>
+<p>使用預設參數建置之實測幾何數據（記錄於 <a href="../artifacts/cad/geometry.json">geometry.json</a>）：</p>
+<ul>
+<li>實體數量：1 個有效實體（Solid）</li>
+<li>實體體積：40865.195 mm³</li>
+<li>邊界框（Bounding Box）：<ul>
+<li>X 範圍：-50.0 mm 至 +50.0 mm（寬度 100.0 mm）</li>
+<li>Y 範圍：-15.0 mm 至 +15.0 mm（深度 30.0 mm）</li>
+<li>Z 範圍：0.0 mm 至 +15.0 mm（高度 15.0 mm）</li>
+</ul>
+</li>
+<li>變更尺寸測試（80.0 × 25.0 × 12.0 mm）：實測產生有效實體，體積縮小，尺寸符合預期。</li>
+</ul>
+<h2>限制與注意事項</h2>
+<ol>
+<li>示範尺寸與非量產認證：
+本整理架幾何尺寸為桌面配件示範設計，未針對特定電路板或機構干涉進行量產驗證。工程圖標籤明確標記材料為 DEMO ONLY、公差為 UNSPECIFIED，不應視為經過量產驗證之製造規格圖。</li>
+<li>平台與核心依賴：
+本流程在 Linux ARM64（aarch64）架構下搭配 uv 及 Python 3.13 運行。cadgen 依賴的 OCP (OpenCASCADE) 核心已透過預編譯 wheel 正確載入。</li>
+<li>視圖快照渲染：
+快照採用 Playwright 下載之 headless Chromium 執行 WebGL 離線渲染，產出為標準 PNG 檔案。</li>
+</ol>
+</main></html>

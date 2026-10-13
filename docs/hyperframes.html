@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>HyperFrames：把四週榜單做成影片</h1>
+<p>成品是 <a href="../artifacts/video/trending.mp4">30 秒 MP4</a>。它以四個固定日期的週榜前三名做成六個場景：開場、四週觀察、結尾。可直接播放或下載，不需要登入 HeyGen。</p>
+<h2>先玩成品</h2>
+<p>在專案根目錄執行 <code>sh scripts/serve.sh</code>，開啟 <code>http://127.0.0.1:8765/</code>，選「四週開源觀察影片」。播放、暫停、拖曳時間軸，對照 <a href="../web/index.html">資料探索器</a> 同一天的週榜。</p>
+<p>本版沒有配音與背景音樂；輸出為 H.264、1280×720、24 fps、30 秒。每週顯示的是該日 GitHub Trending 的原始排名，不依 stars 數字重新排序。</p>
+<h2>它有什麼特色</h2>
+<p>HyperFrames 用 HTML/CSS 與可定位時間的 GSAP timeline 產生影片。修改排版像改網頁，renderer 則逐格設定時間並用 FFmpeg 編碼；它不是把螢幕錄影拼成假示範。本專案先把快照內容寫進 HTML、把 GSAP 存成本機資產，避免渲染時再抓榜單。</p>
+<p>影片由 <a href="../scripts/generate_video.py">generate_video.py</a> 生成；<a href="../video/index.html">video/index.html</a> 是可重建的輸出檔。請改 generator，否則下一次建置會蓋掉直接修改的 HTML。</p>
+<h2>修改與重新生成</h2>
+<p>從專案根目錄執行：</p>
+<pre><code class="language-sh">sh scripts/build_video.sh
+</code></pre>
+<p>腳本依序生成 HTML、跑原生 lint 與 check、渲染 MP4、保存 ffprobe metadata，並擷取 1、6、13、20、28 秒畫面至 <code>artifacts/video/</code>。腳本會指定 Playwright 的 Chromium 路徑，並檢查 JSON 結果；瀏覽器檢查失敗或被跳過就停止，不會只因 CLI 回傳零而宣稱通過。需要專案內 Node、<code>npm ci</code> 安裝的依賴、Playwright Chromium 與系統 FFmpeg。若未安裝 browser，先執行：</p>
+<pre><code class="language-sh">export PATH=&quot;$PWD/.tools/node/bin:$PWD/node_modules/.bin:$PATH&quot;
+playwright install chromium
+</code></pre>
+<p>想用 Studio 看 timeline：</p>
+<pre><code class="language-sh">export PATH=&quot;$PWD/.tools/node/bin:$PWD/node_modules/.bin:$PATH&quot;
+hyperframes preview video --no-open
+</code></pre>
+<p>依 CLI 印出的 localhost URL 開啟 Studio。此版本預設綁定 loopback；遠端使用時另建 SSH tunnel。按 CLI 實際顯示的 port 轉送，別假設它一定是 8765。</p>
+<h2>可以怎麼玩</h2>
+<ul>
+<li>把 <code>weekly</code> 改成 <code>monthly</code>，同時修改標題與 <code>stars this week</code> 標籤，做月榜版。</li>
+<li>改配色、字級與進場動畫，再比較同一秒的 PNG；可重現的 timeline 方便檢查兩版差異。</li>
+<li>加一頁你選中的工具介紹。新增場景時也要調整根元素的 <code>data-duration</code>，避免結尾被截掉。</li>
+</ul>
+<h2>已知限制與來源</h2>
+<p>只展示保存的四日快照，並非即時榜單。週／月滾動區間可能重疊，不能把 <code>period_stars</code> 跨期累加。缺席 Top 10 不代表 stars 為零。</p>
+<p>本次 ARM64 環境使用軟體 GPU 與 screenshot capture，沒有宣稱硬體加速。原生 lint 的七項 warning 是建議把六個場景拆成 sub-compositions 與降低同一 track 密度；不是影片編碼失敗。詳細結果保存在 <code>evidence/video/</code>。</p>
+<p>工具版本固定 <code>hyperframes@0.8.150</code>。契約查核來自 <a href="https://github.com/heygen-com/hyperframes/blob/main/skills/hyperframes-core/SKILL.html">HyperFrames 官方 core skill</a> 與已安裝版本的 CLI；相同品牌的舊 core 文件可能與目前的 duration 契約不同，重建請以 lockfile 與原生 CLI 為準。</p>
+</main></html>

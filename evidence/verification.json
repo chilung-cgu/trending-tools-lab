@@ -1,0 +1,136 @@
+{
+  "verified_at_utc": "2026-10-13T15:24:42.253416+00:00",
+  "checks": {
+    "archify": {
+      "gates": {
+        "validate": "pass",
+        "deliver": "pass",
+        "check": "pass",
+        "browser-check": "pass"
+      },
+      "artifact_sha256": "7cab59febe5d7bcff132d7c7c55c7388191ba7009bf647e36703d18d5ca827ea"
+    },
+    "video": {
+      "width": 1280,
+      "height": 720,
+      "codec": "h264",
+      "duration_seconds": 30,
+      "fps": 24,
+      "frames": 720,
+      "check": {
+        "runtime": true,
+        "layout_samples": 9,
+        "contrast_checks_passed": 45,
+        "motion_audit_enabled": false,
+        "lint_warnings": 7,
+        "browser_skipped": false
+      }
+    },
+    "context": {
+      "full_bytes": 213030,
+      "batch_bytes": 5079,
+      "markers_verified": 3,
+      "token_savings_measured": false,
+      "isolated_stats_verified": true
+    },
+    "cad": {
+      "solid_count": 1,
+      "volume_mm3": 40865.195,
+      "bbox": {
+        "min": [
+          -50.0,
+          -15.0,
+          0.0
+        ],
+        "max": [
+          50.0,
+          15.0,
+          15.0
+        ]
+      },
+      "dimensions_mm": {
+        "width": 100.0,
+        "depth": 30.0,
+        "height": 15.0
+      },
+      "parameters": {
+        "width": 100.0,
+        "depth": 30.0,
+        "height": 15.0,
+        "slot_diameter": 6.0,
+        "spacing": 24.0,
+        "slot_entry_width": 3.5,
+        "fillet_radius": 3.0
+      }
+    },
+    "worktrunk": {
+      "isolation_evidence": "evidence/worktrunk/isolation_evidence.txt",
+      "run_log": "evidence/worktrunk/worktrunk_demo.log"
+    },
+    "python": {
+      "passed": 21
+    },
+    "browser": {
+      "passed": 12,
+      "failed": 0,
+      "evidence": "evidence/playwright.json"
+    },
+    "snapshots": {
+      "four_original_commits_byte_matched": true,
+      "unique_repos": 47,
+      "four_remote_commits_byte_matched": true,
+      "remote_evidence": "evidence/re-review-source.json"
+    },
+    "portable": {
+      "verified_at_utc": "2026-10-13T06:36:11.009Z",
+      "base": "http://127.0.0.1:8767/",
+      "viewport": [
+        1440,
+        1000
+      ],
+      "checked_local_links": 76,
+      "broken_links": [],
+      "page_errors": [],
+      "video_duration": 30,
+      "cad_model_loaded": true,
+      "archify_theme_toggle": true,
+      "explorer_loaded": true
+    },
+    "openrig": {
+      "version": "0.6.10 (3001cc43)",
+      "checks": {
+        "validate_passed": true,
+        "three_seats_ready": true,
+        "all_runtime_stub": true,
+        "queue_chain_complete": true,
+        "send_verified": true,
+        "message_in_pane": true,
+        "restore_needs_fresh": true,
+        "restore_fresh_primed": true,
+        "restored_running": true,
+        "global_files_unchanged": true
+      },
+      "seats": 3,
+      "queue_hops": 3,
+      "tmux_canary_survived": true,
+      "sigterm_cleanup_clean": true
+    }
+  },
+  "limits": [
+    "Real Chromium automation; no local user browser or SSH tunnel test",
+    "CAD material, print fit and cable retention not physically tested",
+    "HyperFrames structural warnings and Impeccable palette warning retained",
+    "No publication, push or original crawler changes",
+    "OpenRig 只用 stub 席位驗證；真實 Claude Code 或 Codex 席位、herdr、cmux、跨主機與重開機還原未測"
+  ],
+  "second_review": {
+    "mcp_notifications_preserved": true,
+    "forced_child_kill_reaped": true,
+    "json_parameter_export_test": "pass",
+    "video_browser_gate_failure_cases": 2,
+    "report": "docs/re-review.md",
+    "impeccable_app_warning_count": 1,
+    "impeccable_whole_web_warning_count": 3,
+    "impeccable_exit_code": 2
+  }
+}

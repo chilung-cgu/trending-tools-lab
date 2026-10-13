@@ -1,0 +1,34 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>審查與修正結果</h1>
+<p>獨立審查原始記錄保存在 <code>evidence/final-review.md</code>；它是修正前的報告，不代表成品仍有相同問題。</p>
+<table>
+<thead>
+<tr>
+<th>問題</th>
+<th>處理與驗證</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Archify 失敗快照沒有 commit 路徑</td>
+<td>依固定 CI source 加入失敗快照提交路徑，以及驗證／push 提早中止分支；兩項 contract 測試由失敗轉通過，原生 showcase 與 browser 閘門重新驗證</td>
+</tr>
+<tr>
+<td>Archify 建置失敗覆蓋成功圖</td>
+<td>加入成品目錄備份／還原 wrapper；以會寫壞 HTML 並新增 receipt 的子行程驗證失敗後還原</td>
+</tr>
+<tr>
+<td>清除篩選只在無結果出現</td>
+<td>保留現有介面；有結果時可清空搜尋與選所有語言。這是可用性小項，未影響資料或操作正確性</td>
+</tr>
+<tr>
+<td>CAD 工程圖尺寸裁切</td>
+<td>縮小投影比例與間距；轉 PNG 人工檢視，另以頁面上緣回歸測試驗證</td>
+</tr>
+<tr>
+<td>MCP 半段 JSON 阻塞與全域記憶統計混入</td>
+<td>非阻塞讀取及 0.1 秒 timeout 測試；三項子行程環境變數隔離後重跑實驗</td>
+</tr>
+</tbody></table>
+<p>本次瀏覽器測試是伺服器上的真實 Chromium；你的本機浏览器、SSH tunnel、實體手機、CAD 列印材料與線材卡入能力尚未實測。原生 lint 的結構建議及 Impeccable 配色警告仍保留，沒有宣稱所有檢查零警告。</p>
+</main></html>

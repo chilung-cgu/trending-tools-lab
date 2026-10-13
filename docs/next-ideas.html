@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>下一步值得做的實驗</h1>
+<p>以下是第二輪審查後的提案，尚未實作。排序依長期使用價值與現有成果的銜接程度；不把 CPU 渲染時間、外部 provider 用量或文字 bytes 當成 Codex quota。</p>
+<h2>優先：OpenBMC／Yocto Log 診斷工作台</h2>
+<p>目前 context-mode 示範以已知 marker 查詢，證明檢索可用，尚不能回答「不知道錯在哪時，能不能找到真正的原因」。下一步建立本機工作台：選擇 log、搜尋錯誤、查看前後文、以檔案與行號回到完整來源。先提供合成案例，再按使用者指定範圍讀取真實 log。</p>
+<p>比較三種方法：看尾端、關鍵字搜尋、context-mode 檢索。測量每個案例是否找到已標註的根因、回傳大小與耗時；未知錯誤及未命中必須留在報告，不能只展示成功案例。混入重複 warning、次生 error、Unicode、長行與截斷輸出，避免 benchmark 只靠獨特 marker 過關。</p>
+<p>成品可以直接用於下次 BitBake 除錯；不自動執行修復、硬體操作或上傳 log。技術基礎來自 <a href="https://github.com/mksglu/context-mode">context-mode 官方 repo</a>，官方的檢索機制不等於診斷準確率保證。</p>
+<p>驗收：每個測試案例都能從檢索結果跳回正確來源行；呈現成功與漏失；沒有模型 tokenizer 就只報 bytes；不修改全域 agent 設定。</p>
+<h2>第二：每週真正會用的 Trending 雷達</h2>
+<p>將四週靜態探索器延伸為可保存觀察的工具：標記想玩／已玩／略過、比較首次觀測與再次上榜、加入個人評語與匯出。先用本機 JSON 匯入／匯出，避免帳號與資料庫成本。觀察狀態與原始榜單分開，不能因為不喜歡某個工具就改掉來源排名。</p>
+<p>增加 repo 評估卡：官方 README、LICENSE、release／commit、安裝條件、付費或硬體需求，並保留查核日期與來源。星數只能描述榜單觀測，不能代替品質或維護度。資料更新失敗時呈現錯誤和最後成功時間，不用舊快照冒充即時結果。</p>
+<p>你的 <a href="https://github.com/chilung-cgu/github-trending-crawler">crawler</a> 已區分最新抓取結果與最新成功快照；雷達應沿用這個契約，先實作手動更新，不擅自新增排程或發布網站。</p>
+<p>驗收：收藏匯入／匯出可重現；未知區間顯示未觀測；更新失敗不覆蓋成功資料；每項技術判斷可追溯官方來源。</p>
+<h2>第三：可以實際改尺寸的 CAD 遊樂場</h2>
+<p>把現在的 JSON 參數操作變成表單與預設款式：輸入線徑、槽距、寬深高，顯示 3D、尺寸、體積與 STEP／STL 下載。分清「瀏覽器快速示意」與「CAD 核心重建成功」；只有核心確認有效單一實體後才允許下載新成果。</p>
+<p>加上小型尺寸試片與兩三種固定幾何範例，方便之後測量自己的線材，再選擇合適的開口。材料彈性、列印方向與公差仍需實測；不能以幾何有效宣稱卡得住線。</p>
+<p>沿用 <a href="https://github.com/earthtojake/text-to-cad">text-to-cad 官方本機流程</a> 與目前固定版本，不需要雲端生圖服務。重建服務只綁 loopback，輸入只接受尺寸，不讓使用者表單執行任意 Python。</p>
+<p>驗收：改 JSON／表單後匯出模型尺寸確實改變；非法尺寸得到可理解錯誤並保留上一份成功成品；快速連續提交不讓舊結果覆蓋新結果。</p>
+<h2>後續串接：技術解說影片</h2>
+<p>前三項有內容後，再用 <a href="https://github.com/heygen-com/hyperframes">HyperFrames</a> 做每週工具介紹、log 診斷步驟或 CAD 建模過程影片。先用字幕與本機資產，不以新增配音帳號作為完成條件；每張圖與數字保留對應來源。</p>
+<p>這比只增加轉場更有內容價值。驗收除了影片尺寸與時長，還要核對每個技術敘述與畫面來源；未完成前三項前，不把此串接宣稱為已有功能。</p>
+</main></html>

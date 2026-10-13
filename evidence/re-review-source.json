@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2026-09-21",
+    "commit": "adf5412a20c05587ff963e0d297ce6d511442d22",
+    "remote_bytes_matched": true,
+    "sha256": "960027f210e3c8febecf08d00ff5f01a462fb3a1b2519ee84286f96d5db4cfae"
+  },
+  {
+    "date": "2026-09-28",
+    "commit": "c883bd69ebbaabc24b6272d9dd83ec0e48093173",
+    "remote_bytes_matched": true,
+    "sha256": "8d9ebda15dac123e9b17ac484100b79d87713f4419a24b03aba34d1601c61e42"
+  },
+  {
+    "date": "2026-10-05",
+    "commit": "a847d9c2700deea91c96d8d68fae01871c73156e",
+    "remote_bytes_matched": true,
+    "sha256": "56b67ef1adb8a8a3322cf73adc36c877df3c39660627b4c015814ad6d87731d4"
+  },
+  {
+    "date": "2026-10-12",
+    "commit": "c169d08b730d4c995a0c83141565621f47e8ba12",
+    "remote_bytes_matched": true,
+    "sha256": "9d03bd2dadd416853546436bacaed5c8464ce1517dc4070d18aafcb128fdd23b"
+  }
+]

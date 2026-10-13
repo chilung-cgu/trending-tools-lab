@@ -1,0 +1,2 @@
+GSAP 3.14.2 · GreenSock
+License: https://gsap.com/standard-license

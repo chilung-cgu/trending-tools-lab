@@ -1,0 +1,30 @@
+{
+  "solid_count": 1,
+  "volume_mm3": 40865.195,
+  "bbox": {
+    "min": [
+      -50.0,
+      -15.0,
+      0.0
+    ],
+    "max": [
+      50.0,
+      15.0,
+      15.0
+    ]
+  },
+  "dimensions_mm": {
+    "width": 100.0,
+    "depth": 30.0,
+    "height": 15.0
+  },
+  "parameters": {
+    "width": 100.0,
+    "depth": 30.0,
+    "height": 15.0,
+    "slot_diameter": 6.0,
+    "spacing": 24.0,
+    "slot_entry_width": 3.5,
+    "fillet_radius": 3.0
+  }
+}

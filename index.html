@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trending 工具實驗室</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f0e6;color:#172c32;font-family:system-ui,sans-serif;line-height:1.75}main{max-width:1080px;margin:auto;padding:64px 24px}h1{font-size:clamp(32px,6vw,56px);line-height:1.2;margin:12px 0 24px}h2{font-size:24px;margin:0 0 10px}.lead{max-width:740px;font-size:19px}.eyebrow{color:#446656;letter-spacing:2px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:20px;margin:36px 0}.card{background:#fffdf7;border:1px solid #c9d1c8;border-radius:12px;padding:24px}.card p{min-height:80px}a{color:#145943;text-underline-offset:4px}a:focus-visible{outline:3px solid #145943;outline-offset:4px}video{width:100%;border-radius:10px;background:#101b25}code{overflow-wrap:anywhere}footer{border-top:1px solid #c9d1c8;padding-top:20px;color:#46606a}
+</style>
+<main>
+<p class="eyebrow">2026.10.13 · 開源工具實踐</p>
+<h1>Trending 工具實驗室</h1>
+<p class="lead">把近四週的 GitHub Trending 收藏，變成可以瀏覽的資料、可以操作的流程圖、可以播放的影片、可以改尺寸的 CAD，以及可重跑的檢索與隔離實驗。</p>
+<div class="grid">
+<article class="card"><h2>榜單探索器</h2><p>切換四個日期與週／月榜，搜尋專案、篩選語言、展開歷史紀錄。以 Impeccable 指引設計。</p><a href="web/">開啟探索器 →</a> · <a href="docs/impeccable.html">操作教學</a></article>
+<article class="card"><h2>Crawler 流程圖</h2><p>以 Archify 呈現 crawler 的抓取、驗證、成功與失敗處理路徑。</p><a href="artifacts/archify/crawler.html">操作流程圖 →</a> · <a href="docs/archify.html">操作教學</a></article>
+<article class="card"><h2>參數化理線器</h2><p>透過 text-to-cad 生態工具產生真實 solid、STEP 與 STL。可修改尺寸並重新建模。</p><a href="artifacts/cad/">查看 CAD 成品 →</a> · <a href="docs/text-to-cad.html">操作教學</a></article>
+<article class="card"><h2>大型 Log 檢索</h2><p>用 context-mode MCP 索引合成 BitBake log，逐一驗證錯誤標記與檢索大小。</p><a href="evidence/context/">檢視實驗證據 →</a> · <a href="docs/context-mode.html">重跑與玩法</a></article>
+<article class="card"><h2>Worktree 隔離練習</h2><p>用 Worktrunk 建立工作區，驗證分支與檔案隔離；適合多個 agent 同時實作。</p><a href="evidence/worktrunk/">檢視實驗證據 →</a> · <a href="docs/worktrunk.html">重跑與玩法</a></article>
+<article class="card"><h2>OpenRig 團隊實驗場</h2><p>用 OpenRig 啟動三席代理團隊，記錄佇列交接、關閉還原與限制。不需要第二個帳號。</p><a href="artifacts/openrig/">查看實跑紀錄 →</a> · <a href="docs/openrig.html">操作教學</a></article>
+</div>
+<h2>四週開源觀察影片</h2>
+<video controls preload="metadata" poster="artifacts/video/frame-6.png"><source src="artifacts/video/trending.mp4" type="video/mp4">瀏覽器不支援播放，請下載影片。</video>
+<p><a href="artifacts/video/trending.mp4" download>下載 30 秒 MP4</a> · <a href="docs/hyperframes.html">修改影片與玩法</a></p>
+<p><a href="docs/re-review.html">第二輪成品審查</a> · <a href="docs/next-ideas.html">下一步值得做的實驗</a></p>
+<footer>資料日期：2026-09-21、09-28、10-05、10-12。非即時榜單；滾動區間 stars 不累加，未進 Top 10 代表未觀測。<a href="data/provenance.json">來源紀錄</a> · <a href="README.html">完整操作說明</a></footer>
+</main></html>

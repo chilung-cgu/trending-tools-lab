@@ -1,0 +1,86 @@
+{
+  "openrig_version": "0.6.10 (3001cc43)",
+  "seats": [
+    {
+      "logical_id": "desk.lead",
+      "session": "desk-lead@triage",
+      "runtime": "stub",
+      "startup_status": "ready",
+      "lifecycle": "running"
+    },
+    {
+      "logical_id": "desk.reviewer",
+      "session": "desk-reviewer@triage",
+      "runtime": "stub",
+      "startup_status": "ready",
+      "lifecycle": "running"
+    },
+    {
+      "logical_id": "desk.scout",
+      "session": "desk-scout@triage",
+      "runtime": "stub",
+      "startup_status": "ready",
+      "lifecycle": "running"
+    }
+  ],
+  "queue_chain": [
+    {
+      "owner": "desk-scout@triage",
+      "source": "desk-lead@triage",
+      "summary": "查核候選 repo",
+      "final_state": "handed-off",
+      "closure_reason": "handed_off_to",
+      "handed_off_to": "desk-reviewer@triage"
+    },
+    {
+      "owner": "desk-reviewer@triage",
+      "source": "desk-scout@triage",
+      "summary": "覆核 scout 的查核結果",
+      "final_state": "handed-off",
+      "closure_reason": "handed_off_to",
+      "handed_off_to": "desk-lead@triage"
+    },
+    {
+      "owner": "desk-lead@triage",
+      "source": "desk-reviewer@triage",
+      "summary": "驗收覆核結果",
+      "final_state": "done",
+      "closure_reason": "no-follow-on",
+      "handed_off_to": null
+    }
+  ],
+  "restore": {
+    "without_fresh": [
+      "awaiting-decision",
+      "awaiting-decision",
+      "awaiting-decision"
+    ],
+    "with_fresh": [
+      "fresh-primed",
+      "fresh-primed",
+      "fresh-primed"
+    ]
+  },
+  "send": {
+    "verified": true,
+    "agent_acknowledged": false,
+    "meaning": "訊息已出現在目標 pane；stub 不會讀取輸入或回覆"
+  },
+  "checks": {
+    "validate_passed": true,
+    "three_seats_ready": true,
+    "all_runtime_stub": true,
+    "queue_chain_complete": true,
+    "send_verified": true,
+    "message_in_pane": true,
+    "restore_needs_fresh": true,
+    "restore_fresh_primed": true,
+    "restored_running": true,
+    "global_files_unchanged": true
+  },
+  "limits": [
+    "stub 席位不呼叫模型",
+    "只驗證本機 tmux、daemon、SQLite 與 CLI 的團隊機制",
+    "未測 Claude Code 或 Codex 真實席位、herdr、cmux 與跨主機"
+  ]
+}

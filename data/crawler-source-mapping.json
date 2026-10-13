@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "targetCommit": "c169d08b730d4c995a0c83141565621f47e8ba12",
+  "repository": {
+    "name": "chilung-cgu/github-trending-crawler",
+    "url": "https://github.com/chilung-cgu/github-trending-crawler",
+    "localVendorPath": "vendor/crawler"
+  },
+  "provenanceRationale": "Archify native workflow evidence schema validates git origin URLs against repo-root remotes. Because local vendor checkout uses a local worktree path as origin, native provenance validation checks would reject the public remote URL. Therefore, deterministic source code mappings and pinned commit permalinks are preserved separately in this manifest.",
+  "nodes": [
+    {
+      "id": "runner_start",
+      "label": "Actions Trigger",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "4-9",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L4-L9",
+      "description": "排程觸發 (每週一 06:45 與 07:30 Asia/Taipei) 與手動 workflow_dispatch 觸發"
+    },
+    {
+      "id": "http_fetch",
+      "label": "HTTP Fresh Request",
+      "file": "scripts/fetch_github_trending.py",
+      "lines": "185-205, 159-176",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/scripts/fetch_github_trending.py#L185-L205",
+      "description": "fetch_period() 發起 GET 請求攜帶 _fresh 奈秒戳記與 no-cache 標頭，並由 validate_freshness() 斷言 Date skew <= 15m 與 Age <= 15m"
+    },
+    {
+      "id": "parse_cards",
+      "label": "BeautifulSoup Parser",
+      "file": "scripts/fetch_github_trending.py",
+      "lines": "61-139",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/scripts/fetch_github_trending.py#L61-L139",
+      "description": "parse_page() 解析 article.Box-row 節點，驗證卡片數 >= 10、檢查重複 repo 與 period-star 欄位完整性"
+    },
+    {
+      "id": "retry_loop",
+      "label": "Attempt Retry Loop",
+      "file": "scripts/fetch_github_trending.py",
+      "lines": "191-241, 178-183",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/scripts/fetch_github_trending.py#L191-L241",
+      "description": "單一 period 最多 3 次重試，線性退避 sleep(2 * attempt)，失敗時 write_debug() 寫入 HTML 傾印"
+    },
+    {
+      "id": "build_snapshot",
+      "label": "Build Snapshot JSON",
+      "file": "scripts/fetch_github_trending.py",
+      "lines": "252-279",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/scripts/fetch_github_trending.py#L252-L279",
+      "description": "build_snapshot() 彙整 weekly 與 monthly 結果，指定 schema_version 1，明確禁止回退至舊快照"
+    },
+    {
+      "id": "validate_shape",
+      "label": "JSON Shape Assertion",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "53-72",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L53-L72",
+      "description": "CI 獨立 Python 檢驗步驟，斷言 schema_version==1、status 合法、包含 10 筆排名 1..10 之項目"
+    },
+    {
+      "id": "upload_debug",
+      "label": "Upload Debug HTML",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "108-115",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L108-L115",
+      "description": "若爬蟲 exit_code != 0，使用 actions/upload-artifact@v4 上傳 debug/ 目錄，保留 7 天"
+    },
+    {
+      "id": "preserve_success",
+      "label": "Preserve Success",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "74-76",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L74-L76",
+      "description": "僅在 steps.crawl.outputs.exit_code == 0 全數成功時，將 latest.json 複製為 latest-success.json"
+    },
+    {
+      "id": "git_push",
+      "label": "Git Commit & Push",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "78-106",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L78-L106",
+      "description": "有效JSON即使crawler返回非0，仍在跳過success-copy後提交latest.json並push；僅JSON驗證通過及前置steps成功才到此步"
+    },
+    {
+      "id": "fail_workflow",
+      "label": "Fail Workflow",
+      "file": ".github/workflows/fetch-trending.yml",
+      "lines": "53-72, 78-106, 117-122",
+      "url": "https://github.com/chilung-cgu/github-trending-crawler/blob/c169d08b730d4c995a0c83141565621f47e8ba12/.github/workflows/fetch-trending.yml#L117-L122",
+      "description": "概括job失敗：crawler非0於最後一步exit1；JSON驗證或push失敗則更早中止，後續debug步驟受GitHub Actions隱含success()限制"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-fetch-fail",
+      "from": "http_fetch",
+      "to": "retry_loop",
+      "trigger": "HTTP 狀態碼非 200 或 HTTP Date/Age 標頭新鮮度驗證失敗",
+      "sourceLocation": "scripts/fetch_github_trending.py:203-204, 224-240"
+    },
+    {
+      "id": "e-parse-fail",
+      "from": "parse_cards",
+      "to": "retry_loop",
+      "trigger": "卡片數少於 10、缺乏必要元素或 period stars 解析失敗",
+      "sourceLocation": "scripts/fetch_github_trending.py:64-67, 133-137"
+    },
+    {
+      "id": "e-retry-backoff",
+      "from": "retry_loop",
+      "to": "http_fetch",
+      "trigger": "嘗試次數未達上限 (attempt < 3)，暫停 2 * attempt 秒後重新請求",
+      "sourceLocation": "scripts/fetch_github_trending.py:239-240"
+    },
+    {
+      "id": "e-retry-exhausted",
+      "from": "retry_loop",
+      "to": "build_snapshot",
+      "trigger": "3 次嘗試皆失敗，記錄錯誤陣列並標記 status=error，不回退舊數據",
+      "sourceLocation": "scripts/fetch_github_trending.py:242-249"
+    },
+    {
+      "id": "e-validate-preserve",
+      "from": "validate_shape",
+      "to": "preserve_success",
+      "trigger": "步驟 steps.crawl.outputs.exit_code == 0",
+      "sourceLocation": ".github/workflows/fetch-trending.yml:74-76"
+    },
+    {
+      "id": "e-validate-debug",
+      "from": "validate_shape",
+      "to": "upload_debug",
+      "trigger": "步驟 steps.crawl.outputs.exit_code != 0",
+      "sourceLocation": ".github/workflows/fetch-trending.yml:108-115"
+    }
+  ],
+  "reviewCorrection": "Flow corrected to commit valid failure snapshots before debug upload; validation/push failures abort remaining normal steps."
+}

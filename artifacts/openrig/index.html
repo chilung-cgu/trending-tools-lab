@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OpenRig 多代理團隊實驗場</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f0e6;color:#172c32;font-family:system-ui,sans-serif;line-height:1.75}
+main{max-width:1040px;margin:auto;padding:48px 24px 72px}h1{font-size:clamp(30px,5vw,48px);line-height:1.2;margin:8px 0 16px}
+h2{font-size:24px;margin:44px 0 12px}a{color:#145943;text-underline-offset:4px}a:focus-visible{outline:3px solid #145943;outline-offset:3px}
+.eyebrow{color:#446656;letter-spacing:1px;font-size:14px}.lead{max-width:760px;font-size:19px}
+.tag{display:inline-block;font-size:13px;padding:2px 10px;border-radius:999px;background:#dcebe3;color:#0f4631}.warn{background:#fbe9d0;color:#6b3d00}
+img{max-width:100%;height:auto;border:1px solid #c9d1c8;border-radius:10px;background:#fff}
+ol.hops{list-style:none;padding:0;margin:0;display:grid;gap:12px}ol.hops li{background:#fffdf7;border:1px solid #c9d1c8;border-radius:12px;padding:14px 18px}
+code,pre{font-family:ui-monospace,monospace}pre{background:#172c32;color:#f4f0e6;padding:16px;border-radius:10px;overflow:auto}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #c9d1c8;padding:8px 10px;text-align:left;vertical-align:top}th{background:#ece7d8}
+footer{margin-top:48px;border-top:1px solid #c9d1c8;padding-top:16px;color:#46606a}
+</style>
+</head>
+<body>
+<main>
+<p class="eyebrow">2026.10.13 · TRENDING 第 7 項成果</p>
+<h1>OpenRig 多代理團隊實驗場</h1>
+<p class="lead">OpenRig 把多個編碼代理組成一個可以啟動、查看、交接工作與還原的團隊。這個頁面呈現我們在隔離環境實際跑出的紀錄：三個席位、三次佇列交接、關閉後還原，以及訊息送達的真正意思。</p>
+<p><span class="tag">OpenRig 0.6.10</span> <span class="tag warn">stub 席位不呼叫模型</span></p>
+
+<h2>先釐清：需要多個帳號嗎？</h2>
+<p>不需要第二個帳號。官方 README 寫明可以只用 Claude Code、只用 Codex，或兩者都用，且不需要第二份訂閱。本次示範的 <code>stub</code> 席位不呼叫模型，所以完全不需要登入。</p>
+<p>若要接上真實的 Claude Code 或 Codex 席位，只需要你已經有的那一個帳號；這部分我們沒有測，見下方限制。</p>
+
+<h2>團隊結構（實際儀表板截圖）</h2>
+<p><img src="topology.png" alt="OpenRig 儀表板顯示 triage 團隊的 desk 群組，含 lead、scout、reviewer 三個席位與它們的連線" width="1440" height="900"></p>
+<p>上圖來自示範過程中運行的 OpenRig 網頁介面（官方標示此介面處於維護模式，命令列才是主要介面）。三個席位在 <code>desk</code> 群組中：lead 派工給 scout，scout 交給 reviewer，reviewer 回報 lead。</p>
+
+<h2>三次真實的佇列交接</h2>
+<ol class="hops" id="hops"></ol>
+<p>每一筆都是 OpenRig 佇列中的真實紀錄，狀態來自 <code>rig queue show</code>。交接會把原項目結案並在下一席建立新項目，所以最後一筆才由 lead 驗收完成。</p>
+
+<h2>關閉後還原：為什麼需要 --fresh</h2>
+<table>
+<thead><tr><th>操作</th><th>三個席位的結果</th></tr></thead>
+<tbody>
+<tr><td><code>rig up triage --existing</code></td><td id="restore-plain"></td></tr>
+<tr><td><code>rig up triage --existing --fresh …</code></td><td id="restore-fresh"></td></tr>
+</tbody>
+</table>
+<p>需要 --fresh 的原因：這些席位重啟後沒有可續接的 session 狀態（官方原始碼的檢查是「沒有擷取到 resume token」）。OpenRig 不會悄悄開出一個沒有記憶的新席位，而是停在「等待你決定」。真實的 Claude Code 或 Codex 席位若有續接憑證，才可能直接續接；我們沒有測。</p>
+
+<h2>訊息送達不等於已讀</h2>
+<p>對席位執行 <code>rig send --verify</code> 的結果是 <span id="send-text"></span>。官方說明它只代表訊息出現在目標終端；stub 沒有輸入迴圈，不會讀取或回覆。</p>
+
+<h2>自己玩一遍</h2>
+<pre>cd openrig &amp;&amp; npm ci
+cd ..
+bash scripts/openrig_demo.sh --out /tmp/openrig-run --shots
+# 結果在 /tmp/openrig-run/run.json 與 /tmp/openrig-run/shots/</pre>
+<p>腳本在獨立的 HOME、OPENRIG_HOME 與 tmux socket 中執行，結束後自動停止 daemon 並刪除暫存，同時比對你的 ~/.codex、~/.claude、~/.tmux.conf 在執行前後沒有變動。完整教學見 <a href="../../docs/openrig.html">OpenRig 操作教學</a>。</p>
+
+<h2>這次實際通過的檢查</h2>
+<ul id="checks"></ul>
+
+<h2>限制</h2>
+<ul id="limits"></ul>
+<footer><a href="run.json">查看原始紀錄 run.json</a> · <a href="../../index.html">回到成品入口</a> · 來源：<a href="https://github.com/mvschwarz/openrig">mvschwarz/openrig</a>（Apache-2.0）</footer>
+</main>
+<script>
+const label={validate_passed:'團隊規格驗證通過',three_seats_ready:'三個席位都就緒',all_runtime_stub:'三個席位都是 stub',queue_chain_complete:'三次佇列交接與結案完成',send_verified:'send --verify 回報訊息已出現在 pane',message_in_pane:'目標 pane 實際出現送出的文字',restore_needs_fresh:'未加 --fresh 時三席都停在等待決定',restore_fresh_primed:'加 --fresh 後三席都重新啟動',restored_running:'還原後三席都在執行',global_files_unchanged:'使用者的 ~/.codex、~/.claude、~/.tmux.conf 前後未變動'};
+const make=(tag,value,cls)=>{const n=document.createElement(tag);n.textContent=value;if(cls)n.className=cls;return n};
+fetch('run.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json()}).then(run=>{
+  const hops=document.getElementById('hops');
+  run.queue_chain.forEach((h,i)=>{const li=document.createElement('li');li.dataset.queueHop=String(i+1);
+    li.append(make('strong','第 '+(i+1)+' 棒：'+h.source+' → '+h.owner),make('div','摘要：'+h.summary),
+      make('div','結果：'+h.final_state+(h.handed_off_to?'（交給 '+h.handed_off_to+'）':'（原因：'+h.closure_reason+'）')));
+    hops.append(li)});
+  const seats=document.createElement('p');seats.className='eyebrow';
+  seats.append('版本 '+run.openrig_version+' · 席位：');
+  run.seats.forEach((s,i)=>{const b=make('b',s.logical_id);b.dataset.seat=s.logical_id;seats.append(i?'、':'',b)});
+  document.querySelector('h1').insertAdjacentElement('afterend',seats);
+  document.getElementById('restore-plain').textContent=run.restore.without_fresh.join('、')+'（需要 --fresh 才能繼續）';
+  document.getElementById('restore-fresh').textContent=run.restore.with_fresh.join('、');
+  document.getElementById('send-text').textContent=run.send.verified?'「已送達並在 pane 顯示」，但 agent 並未確認':'失敗';
+  const checks=document.getElementById('checks');
+  for(const [k,v] of Object.entries(run.checks)) checks.append(make('li',(v?'通過：':'未通過：')+(label[k]||k)));
+  const limits=document.getElementById('limits');run.limits.forEach(x=>limits.append(make('li',x)));
+}).catch(()=>{document.getElementById('hops').append(make('li','無法載入 run.json；請從專案根目錄以 HTTP 伺服器開啟。'))});
+</script>
+</body>
+</html>

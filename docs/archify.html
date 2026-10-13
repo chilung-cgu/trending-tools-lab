@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="../index.html">← 回到成品入口</a></nav><main><h1>Archify：把 Crawler 程式變成互動流程圖</h1>
+<p>開啟 <a href="../artifacts/archify/crawler.html">流程圖</a>，就能看你的 crawler 如何抓取、重試、保存成功快照及處理失敗。HTML 內含圖表與互動資源，不需要登入服務，也不依賴外部 CDN。</p>
+<h2>先玩成品</h2>
+<p>執行 <code>sh scripts/serve.sh</code>，從 <code>http://127.0.0.1:8765/</code> 選「操作流程圖」。也可直接開啟成品 HTML；使用 HTTP 入口比較方便閱讀其他教學。</p>
+<ul>
+<li><strong>找重試流程</strong>：按右下角放大鏡，輸入 <code>retry</code>，選 Attempt Retry Loop。節點抽屜會呈現節點與相關連線。</li>
+<li><strong>比較兩種視覺</strong>：點頂端主題按鈕切換明暗；用樣式選單比較 Flow、Blueprint 等預設。</li>
+<li><strong>追成功路徑</strong>：開啟 PATH，依指引選起點和終點，觀察連線高亮；這是圖中的可達路徑，並非真正執行爬蟲。</li>
+<li><strong>帶走圖片</strong>：點 Export，選 SVG · Light 下載向量圖。本次真實 Chromium 已驗證主題、搜尋、路徑探測與 SVG 下載；剪貼簿與 WebM 匯出尚未實測。</li>
+</ul>
+<p>其他快捷鍵可按 <code>?</code> 查看圖內操作指引；例如 <code>/</code> 搜尋、<code>T</code> 主題、<code>R</code> 路徑探測、<code>0</code> 重設視野。</p>
+<h2>圖中的重要行為</h2>
+<p>圖以固定 commit <code>c169d08b730d4c995a0c83141565621f47e8ba12</code> 的程式碼為準。完整節點來源與行號存於 <a href="../data/crawler-source-mapping.json">source mapping</a>。</p>
+<p>抓取每個 period 最多三次，失敗之間等待 2、4 秒；週榜或月榜失敗會產生 error／partial 快照，不用前期資料冒充新結果。只有 crawler exit code 為 0 才更新 <code>latest-success.json</code>。</p>
+<p><strong>有效的失敗快照仍先 commit／push。</strong> JSON 結構通過驗證後，CI 即使跳過成功快照複製，仍提交 <code>latest.json</code>。Git push 成功後才處理 crawler 失敗的 debug 上傳及 exit 1。若 JSON 驗證或 Git push 本身失敗，job 更早中止，後面的普通 steps 不會執行。</p>
+<p>這也是獨立審查找到並修正的圖表契約差異。靜態圖表示可能的控制流程，無法替代每次 GitHub Actions 的執行紀錄，也不會替你 commit 或 push。</p>
+<h2>修改與重新生成</h2>
+<p>改 <a href="../diagrams/crawler.workflow.json">crawler.workflow.json</a>，再從專案根目錄執行：</p>
+<pre><code class="language-sh">sh scripts/build_archify.sh
+</code></pre>
+<p>腳本使用固定版本的 <code>vendor/archify/archify/bin/archify.mjs</code>，依序通過原生 validate、deliver、check、browser-check，並保存 HTML、截圖及 sidecar receipts。幾條例外路徑使用明確座標，改節點位置後需要一併調整；原生 showcase 閘門會檢查交叉、遮擋與閱讀尺寸。</p>
+<p>建置 wrapper 在閘門返回失敗或 Python 可捕捉的例外時還原上一份 HTML 與 sidecars；已有會故意破壞輸出的回歸測試。此機制不能保證遭 SIGKILL、斷電或磁碟損壞時復原，也不支援同一輸出目錄的平行 writer。</p>
+<h2>來源與限制</h2>
+<p>Archify 原生 repo-root evidence 要求 origin 與公開 repo URL 一致；這份 vendor clone 的 origin 是本機研究 checkout。沒有偽造原生 provenance 成功，而是另存固定 commit 的 source mapping。原生图表幾何門禁通過，與來源對照驗證是兩件事。</p>
+<p>成品包包含已生成圖，不包含原生引擎。重新建置需要來源檔：<a href="https://github.com/tt-a1i/archify">Archify 官方 repo</a>，本次 commit 見 <a href="../data/tool-sources.json">tool-sources.json</a>，以及本專案 Node 22、Playwright Chromium。</p>
+</main></html>

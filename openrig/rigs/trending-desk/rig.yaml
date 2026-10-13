@@ -1,0 +1,15 @@
+version: "0.2"
+name: triage
+summary: 三席 stub 團隊：lead 派工、scout 查核、reviewer 覆核。stub 不呼叫模型，只示範 OpenRig 的團隊、佇列與還原機制。
+pods:
+  - id: desk
+    label: Trending Desk
+    members:
+      - {id: lead, agent_ref: "local:agents/worker", profile: default, runtime: stub, cwd: seats/lead}
+      - {id: scout, agent_ref: "local:agents/worker", profile: default, runtime: stub, cwd: seats/scout}
+      - {id: reviewer, agent_ref: "local:agents/worker", profile: default, runtime: stub, cwd: seats/reviewer}
+    edges:
+      - {kind: delegates_to, from: lead, to: scout}
+      - {kind: delegates_to, from: scout, to: reviewer}
+      - {kind: escalates_to, from: reviewer, to: lead}
+edges: []

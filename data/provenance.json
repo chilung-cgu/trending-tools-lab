@@ -1,0 +1,15 @@
+{
+  "repository": "https://github.com/chilung-cgu/github-trending-crawler",
+  "selection": "last successful snapshot per Taipei date, by git history",
+  "commits": {
+    "2026-09-21": "adf5412a20c05587ff963e0d297ce6d511442d22",
+    "2026-09-28": "c883bd69ebbaabc24b6272d9dd83ec0e48093173",
+    "2026-10-05": "a847d9c2700deea91c96d8d68fae01871c73156e",
+    "2026-10-12": "c169d08b730d4c995a0c83141565621f47e8ba12"
+  },
+  "limitations": [
+    "top 10 only",
+    "weekly and monthly rolling windows overlap",
+    "absence is unobserved, not zero stars"
+  ]
+}

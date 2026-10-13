@@ -1,0 +1,412 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "GitHub Trending 爬蟲工作流與容錯架構",
+    "subtitle": "雙排程抓取、保鮮驗證、3 次退避重試與 GitHub Actions 門禁發布流水線",
+    "output": "artifacts/archify/crawler.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase"
+  },
+  "lanes": [
+    {
+      "id": "ci",
+      "label": "CI/CD 管線 (GitHub Actions)"
+    },
+    {
+      "id": "crawler",
+      "label": "爬蟲核心 (fetch_github_trending.py)"
+    },
+    {
+      "id": "gateway",
+      "label": "門禁與品質檢驗 (Quality Gate)"
+    },
+    {
+      "id": "recovery",
+      "label": "重試退避與異常遙測 (Retry & Telemetry)",
+      "variant": "exception"
+    }
+  ],
+  "phases": [
+    {
+      "id": "intake",
+      "label": "排程與請求發起",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "crawl_gate",
+      "label": "解析驗證與重試迴圈",
+      "fromCol": 2,
+      "toCol": 3,
+      "variant": "emphasis"
+    },
+    {
+      "id": "persist_triage",
+      "label": "門禁分流與持久化",
+      "fromCol": 4,
+      "toCol": 5,
+      "variant": "dashed"
+    }
+  ],
+  "groups": [
+    {
+      "id": "http_engine",
+      "label": "HTTP 擷取與保鮮",
+      "lane": "crawler",
+      "fromCol": 1,
+      "toCol": 2,
+      "variant": "emphasis"
+    },
+    {
+      "id": "error_loop",
+      "label": "異常退避與診斷",
+      "lane": "recovery",
+      "fromCol": 1,
+      "toCol": 2,
+      "variant": "security"
+    }
+  ],
+  "mainPath": [
+    "runner_start",
+    "http_fetch",
+    "parse_cards",
+    "build_snapshot",
+    "validate_shape",
+    "preserve_success",
+    "git_push"
+  ],
+  "nodes": [
+    {
+      "id": "runner_start",
+      "lane": "ci",
+      "col": 0,
+      "type": "cloud",
+      "icon": "clock",
+      "label": "Actions Trigger",
+      "sublabel": "06:45 / 07:30 Taipei",
+      "tag": "ubuntu-latest",
+      "width": 140
+    },
+    {
+      "id": "http_fetch",
+      "lane": "crawler",
+      "col": 1,
+      "type": "external",
+      "icon": "cloud",
+      "label": "HTTP Fresh Request",
+      "sublabel": "GET Trending per period",
+      "tag": "_fresh & no-cache",
+      "width": 140
+    },
+    {
+      "id": "parse_cards",
+      "lane": "crawler",
+      "col": 2,
+      "type": "backend",
+      "icon": "backend",
+      "label": "BeautifulSoup Parser",
+      "sublabel": "Top 10 repo cards",
+      "tag": "cards >= 10",
+      "width": 140
+    },
+    {
+      "id": "retry_loop",
+      "lane": "recovery",
+      "col": 2,
+      "type": "messagebus",
+      "icon": "waiting",
+      "label": "Attempt Retry Loop",
+      "sublabel": "sleep 2 × attempt",
+      "tag": "max 3 attempts",
+      "width": 140
+    },
+    {
+      "id": "build_snapshot",
+      "lane": "crawler",
+      "col": 3,
+      "type": "database",
+      "icon": "database",
+      "label": "Build Snapshot JSON",
+      "sublabel": "weekly + monthly",
+      "tag": "no fallback",
+      "width": 140
+    },
+    {
+      "id": "validate_shape",
+      "lane": "gateway",
+      "col": 3,
+      "type": "security",
+      "icon": "security",
+      "label": "JSON Shape Assertion",
+      "sublabel": "schema / status / rank",
+      "tag": "schema v1",
+      "width": 140
+    },
+    {
+      "id": "upload_debug",
+      "lane": "recovery",
+      "col": 4,
+      "type": "cloud",
+      "icon": "failure",
+      "label": "Upload Debug HTML",
+      "sublabel": "debug HTML / 7 days",
+      "tag": "exit_code != 0",
+      "width": 140
+    },
+    {
+      "id": "preserve_success",
+      "lane": "gateway",
+      "col": 4,
+      "type": "database",
+      "icon": "success",
+      "label": "Preserve Success",
+      "sublabel": "copy latest-success",
+      "tag": "exit_code == 0",
+      "width": 140
+    },
+    {
+      "id": "git_push",
+      "lane": "gateway",
+      "col": 5,
+      "type": "database",
+      "icon": "database",
+      "label": "Git Commit & Push",
+      "sublabel": "rebase / push × 3",
+      "tag": "publish main",
+      "width": 140
+    },
+    {
+      "id": "fail_workflow",
+      "lane": "recovery",
+      "col": 5,
+      "type": "security",
+      "icon": "failure",
+      "label": "Fail Workflow",
+      "sublabel": "CI job failed",
+      "tag": "abort / exit 1",
+      "width": 140
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-start-fetch",
+      "from": "runner_start",
+      "to": "http_fetch",
+      "label": "run crawler",
+      "variant": "emphasis",
+      "role": "main"
+    },
+    {
+      "id": "e-fetch-parse",
+      "from": "http_fetch",
+      "to": "parse_cards",
+      "label": "200 OK & fresh",
+      "variant": "default",
+      "role": "main"
+    },
+    {
+      "id": "e-fetch-fail",
+      "from": "http_fetch",
+      "to": "retry_loop",
+      "label": "HTTP or skew error",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "e-parse-fail",
+      "from": "parse_cards",
+      "to": "retry_loop",
+      "label": "cards < 10 error",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "e-retry-backoff",
+      "from": "retry_loop",
+      "to": "http_fetch",
+      "label": "sleep 2*attempt",
+      "variant": "dashed",
+      "role": "return"
+    },
+    {
+      "id": "e-retry-exhausted",
+      "from": "retry_loop",
+      "to": "build_snapshot",
+      "label": "attempt == 3 error",
+      "variant": "security",
+      "role": "branch",
+      "fromSide": "right",
+      "toSide": "left",
+      "via": [
+        [
+          570,
+          511
+        ],
+        [
+          570,
+          253
+        ]
+      ],
+      "labelAt": [
+        550,
+        440
+      ]
+    },
+    {
+      "id": "e-parse-build",
+      "from": "parse_cards",
+      "to": "build_snapshot",
+      "label": "top 10 valid",
+      "variant": "default",
+      "role": "main"
+    },
+    {
+      "id": "e-build-validate",
+      "from": "build_snapshot",
+      "to": "validate_shape",
+      "label": "write latest.json",
+      "variant": "emphasis",
+      "role": "main",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [
+        [
+          678.8,
+          300
+        ],
+        [
+          600,
+          300
+        ],
+        [
+          600,
+          380
+        ]
+      ],
+      "labelAt": [
+        634,
+        303
+      ]
+    },
+    {
+      "id": "e-validate-preserve",
+      "from": "validate_shape",
+      "to": "preserve_success",
+      "label": "exit_code == 0",
+      "variant": "emphasis",
+      "role": "main"
+    },
+    {
+      "id": "e-preserve-git",
+      "from": "preserve_success",
+      "to": "git_push",
+      "label": "commit & push",
+      "variant": "emphasis",
+      "role": "main"
+    },
+    {
+      "id": "e-debug-fail",
+      "from": "upload_debug",
+      "to": "fail_workflow",
+      "label": "exit 1",
+      "variant": "security",
+      "role": "error"
+    },
+    {
+      "id": "e-valid-failed-crawl-commit",
+      "from": "validate_shape",
+      "to": "git_push",
+      "label": "crawl failed: commit",
+      "variant": "dashed",
+      "role": "branch",
+      "fromSide": "top",
+      "toSide": "top",
+      "route": "up-channel",
+      "channelY": 330
+    },
+    {
+      "id": "e-git-debug",
+      "from": "git_push",
+      "to": "upload_debug",
+      "label": "crawl failed: debug",
+      "variant": "security",
+      "role": "branch",
+      "fromSide": "bottom",
+      "toSide": "right",
+      "via": [
+        [
+          1124.4,
+          455
+        ],
+        [
+          1000,
+          455
+        ],
+        [
+          1000,
+          511
+        ]
+      ]
+    },
+    {
+      "id": "e-invalid-json-fail",
+      "from": "validate_shape",
+      "to": "fail_workflow",
+      "label": "invalid JSON",
+      "variant": "security",
+      "role": "error",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "route": "bottom-channel",
+      "channelY": 600
+    },
+    {
+      "id": "e-push-fail",
+      "from": "git_push",
+      "to": "fail_workflow",
+      "label": "push failed",
+      "variant": "security",
+      "role": "error",
+      "fromSide": "right",
+      "toSide": "right",
+      "route": "outside-right",
+      "channelX": 1220,
+      "labelAt": [
+        1187,
+        428
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "擷取與保鮮機制 (Fetch & Freshness)",
+      "items": [
+        "每週一 06:45 與 07:30 台北時間雙排程執行，降低暫態失敗風險",
+        "請求攜帶動態 _fresh 奈秒時間戳與 no-cache 標頭防快取穿透",
+        "嚴格檢驗 HTTP Date 偏差與 Age 標頭均不得超過 15 分鐘"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "重試與退避策略 (Retry & Backoff)",
+      "items": [
+        "HTTP 錯誤或 HTML 解析異常時，單一週期最多重試 3 次",
+        "採 2 * attempt 線性退避 (2s, 4s)，每次失敗保存完整 HTML 至 debug/",
+        "3 次全數失敗時標記 error，絕不回退至上一期快照以防數據陳舊"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "品質門禁與版本控制 (Gate & Persistence)",
+      "items": [
+        "獨立 Python 步驟嚴格斷言 schema_version==1、status 及 1..10 排名",
+        "僅在 exit_code == 0 全數成功時才備份最新 latest-success.json",
+        "有效 JSON 即使爬取失敗仍先 commit / push；之後上傳 debug 並標記失敗",
+        "JSON 驗證或 Git push 失敗則中止 job，不會執行後續 debug 上傳"
+      ]
+    }
+  ]
+}

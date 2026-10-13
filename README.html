@@ -1,0 +1,78 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="./index.html">← 回到成品入口</a></nav><main><h1>Trending 工具實驗室</h1>
+<p>把 GitHub Trending 上值得玩的開源工具，各做成一個可以打開、操作、重跑的小成果，並誠實記錄限制。第一期取自 2026-09-21 到 2026-10-12 四週的 Trending 快照，共 6 個工具實驗加 1 個多代理團隊實驗。</p>
+<p>資料來源是 <a href="https://github.com/chilung-cgu/github-trending-crawler">chilung-cgu/github-trending-crawler</a> 保存的快照。這些是歷史觀測，不是即時榜單。</p>
+<h2>打開成品</h2>
+<pre><code class="language-sh">git clone &lt;本 repo&gt; trending-tools-lab
+cd trending-tools-lab
+python3 -m http.server 8765 --bind 127.0.0.1
+</code></pre>
+<p>開啟 <a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a> 。成品都已預先建置，可以直接瀏覽，不需要安裝任何工具。若是在遠端機器上，從自己的電腦建立 SSH tunnel：<code>ssh -N -L 8765:127.0.0.1:8765 你的主機</code>。</p>
+<table>
+<thead>
+<tr>
+<th>成果</th>
+<th>你可以做什麼</th>
+<th>教學</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Impeccable：榜單探索器</td>
+<td>換日期、週月榜，搜尋與篩選語言，展開跨期紀錄</td>
+<td><a href="docs/impeccable.html">docs/impeccable.md</a></td>
+</tr>
+<tr>
+<td>Archify：Crawler 流程圖</td>
+<td>搜尋節點、追蹤成功與失敗路徑、切換主題、匯出 SVG</td>
+<td><a href="docs/archify.html">docs/archify.md</a></td>
+</tr>
+<tr>
+<td>HyperFrames：30 秒影片</td>
+<td>播放影片；改文案或配色後重新渲染</td>
+<td><a href="docs/hyperframes.html">docs/hyperframes.md</a></td>
+</tr>
+<tr>
+<td>text-to-cad：參數化理線器</td>
+<td>旋轉 3D 模型、改尺寸、匯出 STEP 與 STL</td>
+<td><a href="docs/text-to-cad.html">docs/text-to-cad.md</a></td>
+</tr>
+<tr>
+<td>context-mode：大型 log 檢索</td>
+<td>在合成建置 log 中找錯誤，量測檢索輸出大小</td>
+<td><a href="docs/context-mode.html">docs/context-mode.md</a></td>
+</tr>
+<tr>
+<td>Worktrunk：工作區隔離</td>
+<td>建立獨立 worktree，驗證檔案互不污染</td>
+<td><a href="docs/worktrunk.html">docs/worktrunk.md</a></td>
+</tr>
+<tr>
+<td>OpenRig：多代理團隊</td>
+<td>啟動三席團隊、佇列交接、關閉還原；不需要第二個帳號</td>
+<td><a href="docs/openrig.html">docs/openrig.md</a></td>
+</tr>
+</tbody></table>
+<p>每份教學都包含功能、操作步驟、可以怎麼玩、重建方式與已知限制。</p>
+<h2>資料與誠實原則</h2>
+<ul>
+<li>滾動週榜與月榜區間會重疊，stars 不能跨期相加。</li>
+<li>沒進 Top 10 代表「未觀測」，不代表 0 stars。</li>
+<li>各工具有沒有警告、哪些功能沒測，都寫在對應教學與 <a href="docs/re-review.html">第二輪審查</a>。</li>
+<li>沒有實體列印過 CAD 模型；沒有在真實 Claude Code 或 Codex 席位上測 OpenRig。</li>
+</ul>
+<h2>重建</h2>
+<p>重建需要 Node 22、Python 3.13（uv）、Chromium 與 FFmpeg。從乾淨環境開始：</p>
+<pre><code class="language-sh">npm ci
+uv sync
+sh scripts/fetch_vendor.sh        # 取得固定 commit 的 crawler 與 archify 原始碼
+cd openrig &amp;&amp; npm ci &amp;&amp; cd ..     # OpenRig 0.6.10
+.venv/bin/python -m pytest -q
+node_modules/.bin/playwright test
+</code></pre>
+<p>各成果的專用建置腳本見 scripts/ 與對應教學。依賴版本由 package-lock.json、uv.lock、<a href="data/tool-sources.json">data/tool-sources.json</a> 固定。</p>
+<h2>授權</h2>
+<p>原創程式與文件採用 MIT 授權，見 LICENSE。第三方元件與其授權見 <a href="NOTICE.html">NOTICE.md</a>。</p>
+<h2>下一步</h2>
+<p>見 <a href="docs/next-ideas.html">docs/next-ideas.md</a>：個人 Trending 雷達與定期挑選新工具的方向，尚未實作。</p>
+</main></html>

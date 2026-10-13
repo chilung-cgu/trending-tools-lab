@@ -1,0 +1,21 @@
+{
+  "name": "trending-tools-lab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:data": "python3 -m unittest discover -s tests -p test_snapshots.py"
+  },
+  "dependencies": {
+    "context-mode": "1.0.169",
+    "gsap": "3.14.2",
+    "hyperframes": "0.8.150",
+    "impeccable": "4.5.2",
+    "marked": "17.0.1",
+    "three": "0.186.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.0"
+  }
+}

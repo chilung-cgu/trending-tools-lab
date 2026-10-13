@@ -1,0 +1,76 @@
+<!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>工具實驗室操作教學</title>
+<style>*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#f4f0e6;color:#172c32;line-height:1.8;max-width:880px;margin:auto;padding:32px 24px}pre{background:#172c32;color:#fff;padding:16px;border-radius:8px;overflow:auto}code{overflow-wrap:anywhere}a{color:#145943;text-underline-offset:4px}img,video{max-width:100%}table{border-collapse:collapse;display:block;overflow:auto}td,th{padding:10px;border:1px solid #aebeb5}h1,h2,h3{line-height:1.4}a:focus-visible{outline:3px solid #145943}</style>
+<nav><a href="./index.html">← 回到成品入口</a></nav><main><h1>第三方元件與授權（NOTICE）</h1>
+<p>本 repo 的原創程式、文件與設定採用 MIT 授權（見 LICENSE）。下列第三方內容保持各自授權；以下資訊逐項查自隨附授權檔、套件資訊或官方頁面（查核日 2026-10-13）。</p>
+<table>
+<thead>
+<tr>
+<th>元件</th>
+<th>版本／來源</th>
+<th>授權</th>
+<th>在本 repo 的形式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>three.js</td>
+<td>0.186.1（package-lock.json）</td>
+<td>MIT，Copyright © 2010-2026 three.js authors</td>
+<td>執行檔複本在 artifacts/cad/assets/，授權檔同目錄 LICENSE</td>
+</tr>
+<tr>
+<td>GSAP</td>
+<td>3.14.2（檔頭）</td>
+<td>GSAP Standard &quot;No Charge&quot; License（Webflow）；官方頁面現行條款允許無費用使用，但不得向終端使用者收費，也不得用於與 Webflow 視覺動畫建構功能競爭的工具，且須保留版權與商標標示</td>
+<td>video/assets/gsap.min.js，保留原檔頭；授權連結 <a href="https://gsap.com/standard-license">https://gsap.com/standard-license</a></td>
+</tr>
+<tr>
+<td>JetBrains Mono</td>
+<td>Archify 內嵌的子集字型</td>
+<td>SIL Open Font License 1.1</td>
+<td>內嵌於 artifacts/archify/crawler.html，授權全文與版權聲明保留在檔頭</td>
+</tr>
+<tr>
+<td>Archify</td>
+<td>固定 commit，見 data/tool-sources.json</td>
+<td>MIT，Copyright (c) 2026 tt-a1i</td>
+<td>只有其產生的 artifacts/archify/crawler.html；原始碼不在本 repo，可用 scripts/fetch_vendor.sh 取得</td>
+</tr>
+<tr>
+<td>Impeccable</td>
+<td>impeccable 4.5.2（package.json）</td>
+<td>Apache-2.0（套件資訊）</td>
+<td>本 repo 只放使用它產生的探索器設計文件與腳本，不含其原始碼</td>
+</tr>
+<tr>
+<td>HyperFrames</td>
+<td>hyperframes 0.8.150（package.json）</td>
+<td>Apache-2.0（套件資訊）</td>
+<td>只放 composition 與渲染腳本；成品 MP4 由它渲染</td>
+</tr>
+<tr>
+<td>text-to-cad／cadgen</td>
+<td>cadgen 0.7.21（pyproject.toml）；專案 text-to-cad 為 MIT</td>
+<td>見各自專案授權</td>
+<td>只放模型腳本、匯出成品與工程圖，不含其原始碼</td>
+</tr>
+<tr>
+<td>context-mode</td>
+<td>context-mode 1.0.169（package.json）</td>
+<td>Elastic-2.0（套件資訊）；使用與再散布條件請閱讀其授權</td>
+<td>只放呼叫它的實驗腳本與實測紀錄；套件由 npm ci 安裝，不隨 repo 發布</td>
+</tr>
+<tr>
+<td>OpenRig</td>
+<td>@openrig/cli 0.6.10（openrig/package-lock.json）</td>
+<td>Apache-2.0</td>
+<td>本 repo 只放團隊定義、示範腳本與實跑紀錄；套件由 npm ci 安裝，不隨 repo 發布</td>
+</tr>
+<tr>
+<td>GitHub Trending 資料</td>
+<td>chilung-cgu/github-trending-crawler 的固定 commit</td>
+<td>資料來自 GitHub 公開頁面的觀測快照</td>
+<td>data/raw/；僅作歷史觀測，不是即時榜單</td>
+</tr>
+</tbody></table>
+<p>若要修改或再散布，請自行確認上表各授權對你的用途是否適用。</p>
+</main></html>
