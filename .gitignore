@@ -1,0 +1,13 @@
+node_modules/
+.venv/
+.tools/
+vendor/
+.worktrees/
+.superpowers/
+__pycache__/
+.pytest_cache/
+test-results/
+playwright-report/
+*.log
+artifacts/
+evidence/
